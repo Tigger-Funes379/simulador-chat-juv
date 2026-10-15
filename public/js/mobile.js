@@ -1,4 +1,8 @@
 const socket = io();
+
+// NUEVO: Apenas se conecta, el celular le avisa al servidor que es un participante
+socket.emit('soy_participante');
+
 const pantallaCelular = document.getElementById('pantalla-celular');
 let votoEnviado = false;
 
