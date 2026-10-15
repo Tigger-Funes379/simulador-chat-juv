@@ -8,23 +8,31 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-// Variables globales del servidor
 let estadoVotacion = {
     activa: false,
     opciones: null,
     fin: false 
 };
 
-let participantesConectados = 0; // Contador en vivo
+let participantesConectados = 0; 
+let dispositivosUnicos = {}; // Diccionario para rastrear los IDs de los celulares
 
 io.on('connection', (socket) => {
-    // Mandamos el estado actual al que acaba de entrar
     socket.emit('estado_actual', estadoVotacion);
 
-    // NUEVO: Escuchamos si el que se conectó es un celular
-    socket.on('soy_participante', () => {
-        socket.isParticipante = true; // Marcamos a este usuario como celular
-        participantesConectados++;
+    socket.on('soy_participante', (deviceId) => {
+        socket.isParticipante = true;
+        socket.deviceId = deviceId; // Guardamos el ID en la conexión actual
+
+        // Si es la primera vez que vemos este celular (o no tiene pestañas abiertas)
+        if (!dispositivosUnicos[deviceId]) {
+            dispositivosUnicos[deviceId] = 1; // Registramos que tiene 1 pestaña
+            participantesConectados++;
+        } else {
+            // Si ya existe, solo sumamos una pestaña más a la cuenta interna de ese dispositivo
+            dispositivosUnicos[deviceId]++;
+        }
+        
         io.emit('actualizar_participantes', participantesConectados);
     });
 
@@ -49,15 +57,23 @@ io.on('connection', (socket) => {
 
     socket.on('reiniciar_taller', () => {
         estadoVotacion = { activa: false, opciones: null, fin: false };
-        participantesConectados = 0; // Reseteamos el contador por las dudas
+        participantesConectados = 0; 
+        dispositivosUnicos = {}; // Vaciamos el registro de celulares
         io.emit('expulsar_clientes'); 
         io.emit('actualizar_participantes', participantesConectados);
     });
 
     socket.on('disconnect', () => {
-        // NUEVO: Al desconectarse, solo restamos si era un celular
-        if (socket.isParticipante) {
-            participantesConectados--;
+        // Al desconectarse, verificamos si era un celular con ID registrado
+        if (socket.isParticipante && socket.deviceId) {
+            dispositivosUnicos[socket.deviceId]--;
+            
+            // Si el dispositivo ya no tiene NINGUNA pestaña abierta, restamos del contador general
+            if (dispositivosUnicos[socket.deviceId] <= 0) {
+                participantesConectados--;
+                delete dispositivosUnicos[socket.deviceId]; // Lo borramos del registro
+            }
+            
             io.emit('actualizar_participantes', participantesConectados);
         }
     });

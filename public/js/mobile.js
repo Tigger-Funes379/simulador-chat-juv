@@ -1,7 +1,14 @@
 const socket = io();
 
-// NUEVO: Apenas se conecta, el celular le avisa al servidor que es un participante
-socket.emit('soy_participante');
+// Creamos un ID único para el celular y lo guardamos en la memoria del navegador
+let deviceId = localStorage.getItem('simulador_device_id');
+if (!deviceId) {
+    deviceId = 'celular_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('simulador_device_id', deviceId);
+}
+
+// Le avisamos al servidor que somos un participante y le pasamos nuestro ID
+socket.emit('soy_participante', deviceId);
 
 const pantallaCelular = document.getElementById('pantalla-celular');
 let votoEnviado = false;
@@ -43,7 +50,6 @@ function renderizarBotones() {
     });
 }
 
-// NUEVO: Pantalla de Fin
 function renderizarFin() {
     pantallaCelular.innerHTML = `
         <div class="mensaje-exito" style="border-color: #ff5252;">
@@ -73,12 +79,10 @@ socket.on('votacion_cerrada', () => {
     renderizarEspera();
 });
 
-// NUEVO: Escucha el final de la historia
 socket.on('simulacion_finalizada', () => {
     renderizarFin();
 });
 
-// NUEVO: Escucha el botón de reinicio masivo del facilitador
 socket.on('expulsar_clientes', () => {
     pantallaCelular.innerHTML = `
         <div class="mensaje-exito">
@@ -87,5 +91,5 @@ socket.on('expulsar_clientes', () => {
             <p>Si estás en un nuevo taller, volvé a escanear el QR.</p>
         </div>
     `;
-    socket.disconnect(); // Corta la conexión con el servidor permanentemente
+    socket.disconnect(); 
 });
