@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador - Pantalla Principal</title>
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="pantalla-proyector">
+        <!-- El Celular en el centro -->
+        <div class="columna-chat">
+            <div class="cabecera-chat">
+                <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="Avatar" class="avatar-grupo">
+                <div class="info-grupo">
+                    <h2 id="chat-titulo">Promo 5to - Oficial 🎓🔥</h2>
+                    <p id="chat-subtitulo">Nico, Sofí, Mati, Camila, Lucas...</p>
+                </div>
+            </div>
+            <div id="chat-container"></div>
+        </div>
+    </div>
+
+    <!-- PANTALLA SUPERPUESTA DE PARADA DILEMÁTICA (Oculta por defecto) -->
+    <div id="overlay-parada" style="display: none;">
+        <div class="overlay-contenido">
+            <div class="overlay-info">
+                <h2 id="overlay-titulo">🛑 PARADA X</h2>
+                <p id="overlay-pregunta">Pregunta de la parada</p>
+                
+                <div class="opciones-lista">
+                    <div class="opcion-item A">
+                        <div class="opcion-texto">Opción A: <span id="texto-A">Opción A</span></div>
+                        <div class="opcion-votos" id="votos-A">0</div>
+                    </div>
+                    <div class="opcion-item B">
+                        <div class="opcion-texto">Opción B: <span id="texto-B">Opción B</span></div>
+                        <div class="opcion-votos" id="votos-B">0</div>
+                    </div>
+                    <div class="opcion-item C">
+                        <div class="opcion-texto">Opción C: <span id="texto-C">Opción C</span></div>
+                        <div class="opcion-votos" id="votos-C">0</div>
+                    </div>
+                </div>
+                <p class="instruccion-enter">Presioná ENTER para cerrar votación y continuar</p>
+            </div>
+            
+            <!-- Box del QR a un costado -->
+            <div class="overlay-qr">
+                <h3>¡Votá acá!</h3>
+                <div class="qr-placeholder" style="background: none; border-radius: 0;">
+                    <!-- Cuando subas a Netlify/Render, cambiá "TULINK.netlify.app" por tu link real -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://TULINK.netlify.app/mobile.html" alt="Código QR para votar" style="border-radius: 10px; width: 100%; height: 100%;">
+                </div>
+                <p>Escaneá con tu celular</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA SUPERPUESTA DE FIN DE SIMULACIÓN (Oculta por defecto) -->
+    <div id="overlay-fin" style="display: none;">
+        <div class="overlay-contenido fin-contenido">
+            <h1>🛑 FIN DE LA SIMULACIÓN 🛑</h1>
+        </div>
+    </div>
+
+    <!-- FRANJA NEGRA DE JUVENTUDES -->
+    <footer class="pie-pagina">
+        <img src="img/pie.png" alt="Juventudes Mendoza">
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
