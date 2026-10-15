@@ -16,7 +16,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'https://lh3.googleusercontent.com/d/1X5Xb1bL717-E5-fIAn509R8rS3L9yDnG' // Avatar grupal interactivo
+        avatar: 'img/grupo.jpg' // Avatar local
     },
     { tipo: 'msj', emisor: 'Nico', texto: 'Che, ¿alguien vio el buzo que dejé en el banco de atrás? Tenía $15.000 adentro para la fotocopiadora.' },
     { tipo: 'msj', emisor: 'Sofí', texto: 'Yo no vi nada.' },
@@ -31,9 +31,9 @@ const guion = [
         titulo: 'La decisión del grupo ante la difamación',
         pregunta: '¿Qué hace el resto del grupo de WhatsApp ante la foto y el mensaje de Camila?',
         opciones: { 
-            A: 'La Ola: Mandan stickers y reenvían', 
-            B: 'El Silencio: Ignoran el tema', 
-            C: 'El Freno: Piden que borren la foto' 
+            A: 'La Ola: Todos mandan stickers de risa, reenvían la foto a otros grupos y ponen "Manden más contexto".', 
+            B: 'El Silencio: Nadie dice nada, leen los mensajes pero dejan pasar la situación para no meterse en problemas.', 
+            C: 'El Freno: Un compañero escribe en el grupo: "Pará Cami, borrá eso. No da acusar ni subir fotos sin saber, nos vamos a comer un garrón todos".' 
         },
         ramificacion: {
             opcionA_B: [
@@ -43,7 +43,7 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'https://lh3.googleusercontent.com/d/1X6Yc2cL718-F6-gJBo619S9tT4Mz0eHh' // Avatar de número incógnito misterioso
+                    avatar: 'img/desconocido.jpg' // Avatar de número incógnito local
                 },
                 { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Coacción (Apriete) / Difamación.' }
             ],
@@ -56,9 +56,9 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'https://lh3.googleusercontent.com/d/1X6Yc2cL718-F6-gJBo619S9tT4Mz0eHh' // Avatar de número incógnito misterioso
+                    avatar: 'img/desconocido.jpg' // Avatar de número incógnito local
                 },
-                { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Coacción (Apriete) / Difamación.' }
+                { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Extorsión / Difamación.' }
             ]
         }
     },
@@ -72,9 +72,9 @@ const guion = [
         titulo: 'El punto de quiebre y la intervención',
         pregunta: 'Lucas está en la plaza desbordado y asustado. ¿Qué camino toma la situación en este momento?',
         opciones: { 
-            A: 'Llegada de la Denuncia Judicial', 
-            B: 'Intervención Institucional / Gabinete', 
-            C: 'Justicia por mano propia' 
+            A: 'Llegada de la Denuncia Judicial: Los padres de Lucas ven los mensajes, van directo a la comisaría y radican una denuncia por Extorsión y Violencia Digital.', 
+            B: 'Intervención Institucional / Gabinete: Un compañero/a que vio el chat se acerca al Servicio de Orientación Escolar (SOE) / Directora y muestra las capturas antes de que explote afuera.', 
+            C: 'Justicia por mano propia: Los amigos de Nico van a buscar a Lucas a la salida para sacarle las cosas de la mochila por la fuerza.' 
         }
     },
 
@@ -84,7 +84,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'https://lh3.googleusercontent.com/d/1X5Xb1bL717-E5-fIAn509R8rS3L9yDnG' // De vuelta al avatar grupal interactivo
+        avatar: 'img/grupo.jpg' // Vuelve al avatar grupal local
     },
     { tipo: 'sistema', texto: 'Lunes, 10:30 AM. Tres días después.' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Gente, me llegó una citación de la fiscalía a mi casa. Mis viejos me quieren matar.' },
@@ -96,9 +96,9 @@ const guion = [
         titulo: 'Resolución y consecuencias (Empalme Teórico)',
         pregunta: '¿Qué creen que pasa ahora según la Ley 27.801?',
         opciones: { 
-            A: 'Son menores: amonestación en la escuela y no pasa nada más.', 
-            B: 'Prisión directa en un calabozo y a los padres no les dicen nada.', 
-            C: 'Causa penal juvenil, reparación y los padres responden económicamente.' 
+            A: '"Son menores de edad, no pasa nada, se resuelve con una amonestación en la escuela y fue."', 
+            B: '"A los pibes los llevan directamente a la comisaría del menor y a los padres no les dicen nada."', 
+            C: '"Se abre una causa penal juvenil (a partir de los 14 años), intervienen supervisores especializados, los padres responden económicamente por los daños y se aplican pautas de conducta o reparación comunitaria."' 
         }
     },
 
