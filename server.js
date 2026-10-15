@@ -12,18 +12,21 @@ app.use(express.static('public'));
 let estadoVotacion = {
     activa: false,
     opciones: null,
-    fin: false // Nuevo estado para el fin de la simulación
+    fin: false 
 };
 
 let participantesConectados = 0; // Contador en vivo
 
 io.on('connection', (socket) => {
-    // Al conectar sumamos uno y avisamos al proyector
-    participantesConectados++;
-    io.emit('actualizar_participantes', participantesConectados);
-
-    // Mandamos el estado actual al celular que acaba de entrar
+    // Mandamos el estado actual al que acaba de entrar
     socket.emit('estado_actual', estadoVotacion);
+
+    // NUEVO: Escuchamos si el que se conectó es un celular
+    socket.on('soy_participante', () => {
+        socket.isParticipante = true; // Marcamos a este usuario como celular
+        participantesConectados++;
+        io.emit('actualizar_participantes', participantesConectados);
+    });
 
     socket.on('abrir_votacion', (opciones) => {
         estadoVotacion = { activa: true, opciones: opciones, fin: false };
@@ -35,7 +38,6 @@ io.on('connection', (socket) => {
         io.emit('votacion_cerrada');
     });
 
-    // NUEVO: El proyector avisa que terminó la simulación
     socket.on('fin_simulacion', () => {
         estadoVotacion = { activa: false, opciones: null, fin: true };
         io.emit('simulacion_finalizada');
@@ -45,16 +47,19 @@ io.on('connection', (socket) => {
         io.emit('actualizar_votos', opcion);
     });
 
-    // NUEVO: El facilitador apretó la "R" para limpiar el taller
     socket.on('reiniciar_taller', () => {
         estadoVotacion = { activa: false, opciones: null, fin: false };
-        io.emit('expulsar_clientes'); // Le decimos a los celus que se desconecten
+        participantesConectados = 0; // Reseteamos el contador por las dudas
+        io.emit('expulsar_clientes'); 
+        io.emit('actualizar_participantes', participantesConectados);
     });
 
     socket.on('disconnect', () => {
-        // Al desconectarse restamos uno y avisamos
-        participantesConectados--;
-        io.emit('actualizar_participantes', participantesConectados);
+        // NUEVO: Al desconectarse, solo restamos si era un celular
+        if (socket.isParticipante) {
+            participantesConectados--;
+            io.emit('actualizar_participantes', participantesConectados);
+        }
     });
 });
 
