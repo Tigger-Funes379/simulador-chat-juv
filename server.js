@@ -8,37 +8,53 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-// Variable para saber si los celulares deben mostrar botones o esperar
+// Variables globales del servidor
 let estadoVotacion = {
     activa: false,
-    opciones: null
+    opciones: null,
+    fin: false // Nuevo estado para el fin de la simulación
 };
 
-io.on('connection', (socket) => {
-    console.log('Un usuario se ha conectado:', socket.id);
+let participantesConectados = 0; // Contador en vivo
 
-    // Cuando alguien escanea el QR, le mandamos el estado actual al instante
+io.on('connection', (socket) => {
+    // Al conectar sumamos uno y avisamos al proyector
+    participantesConectados++;
+    io.emit('actualizar_participantes', participantesConectados);
+
+    // Mandamos el estado actual al celular que acaba de entrar
     socket.emit('estado_actual', estadoVotacion);
 
-    // El proyector avisa que se abrió una parada
     socket.on('abrir_votacion', (opciones) => {
-        estadoVotacion = { activa: true, opciones: opciones };
+        estadoVotacion = { activa: true, opciones: opciones, fin: false };
         io.emit('votacion_abierta', opciones);
     });
 
-    // El proyector avisa que se cerró la parada (tecla Enter)
     socket.on('cerrar_votacion', () => {
-        estadoVotacion = { activa: false, opciones: null };
+        estadoVotacion = { activa: false, opciones: null, fin: false };
         io.emit('votacion_cerrada');
     });
 
-    // Un celular envía un voto
+    // NUEVO: El proyector avisa que terminó la simulación
+    socket.on('fin_simulacion', () => {
+        estadoVotacion = { activa: false, opciones: null, fin: true };
+        io.emit('simulacion_finalizada');
+    });
+
     socket.on('voto_enviado', (opcion) => {
         io.emit('actualizar_votos', opcion);
     });
 
+    // NUEVO: El facilitador apretó la "R" para limpiar el taller
+    socket.on('reiniciar_taller', () => {
+        estadoVotacion = { activa: false, opciones: null, fin: false };
+        io.emit('expulsar_clientes'); // Le decimos a los celus que se desconecten
+    });
+
     socket.on('disconnect', () => {
-        console.log('Usuario desconectado:', socket.id);
+        // Al desconectarse restamos uno y avisamos
+        participantesConectados--;
+        io.emit('actualizar_participantes', participantesConectados);
     });
 });
 

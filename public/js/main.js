@@ -153,6 +153,7 @@ function avanzarHistoria() {
         
     } else if (actual.tipo === 'fin_simulacion') {
         overlayFin.style.display = 'flex';
+        socket.emit('fin_simulacion'); // Le avisa al servidor que terminó
     }
 
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -164,6 +165,12 @@ socket.on('actualizar_votos', (opcion) => {
         contadores[opcion]++;
         document.getElementById(`votos-${opcion}`).innerText = contadores[opcion];
     }
+});
+
+// Mostrar la cantidad de participantes en vivo
+socket.on('actualizar_participantes', (cantidad) => {
+    const contador = document.getElementById('contador-participantes');
+    if (contador) contador.innerText = `👥 Participantes: ${cantidad}`;
 });
 
 document.addEventListener('keydown', (e) => {
@@ -197,6 +204,13 @@ document.addEventListener('keydown', (e) => {
         socket.emit('cerrar_votacion'); 
         
         avanzarHistoria();
+
+    // NUEVO CONTROL: TECLA "R" PARA REINICIAR EL TALLER MASIVAMENTE
+    } else if (e.code === 'KeyR') {
+        if (confirm('⚠️ ¿Estás seguro de que querés REINICIAR el taller? Esto expulsará a todos los celulares conectados y empezará la historia desde cero.')) {
+            socket.emit('reiniciar_taller');
+            location.reload(); // Recarga la página del proyector para empezar limpio
+        }
     }
 });
 

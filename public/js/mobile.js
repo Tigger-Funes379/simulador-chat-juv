@@ -2,7 +2,6 @@ const socket = io();
 const pantallaCelular = document.getElementById('pantalla-celular');
 let votoEnviado = false;
 
-// Estado 1: Esperando a que el facilitador llegue a una Parada
 function renderizarEspera() {
     pantallaCelular.innerHTML = `
         <div class="mensaje-exito" style="border-color: #ffeb3b;">
@@ -13,7 +12,6 @@ function renderizarEspera() {
     `;
 }
 
-// Estado 2: Votación Abierta (Dibuja los botones simples)
 function renderizarBotones() {
     pantallaCelular.innerHTML = `
         <h2>Elige tu opción</h2>
@@ -26,12 +24,10 @@ function renderizarBotones() {
     botones.forEach(boton => {
         boton.addEventListener('click', (e) => {
             if (votoEnviado) return;
-
             const opcion = e.target.getAttribute('data-opcion');
             socket.emit('voto_enviado', opcion);
             votoEnviado = true;
             
-            // Estado 3: Voto Enviado
             pantallaCelular.innerHTML = `
                 <div class="mensaje-exito">
                     <h2>¡Voto enviado! 🚀</h2>
@@ -43,9 +39,21 @@ function renderizarBotones() {
     });
 }
 
-// Escuchadores de eventos del servidor
+// NUEVO: Pantalla de Fin
+function renderizarFin() {
+    pantallaCelular.innerHTML = `
+        <div class="mensaje-exito" style="border-color: #ff5252;">
+            <h2 style="color: #ff5252;">🛑 FIN 🛑</h2>
+            <p>La simulación ha terminado.</p>
+            <p>Mirá la pantalla para el debate final.</p>
+        </div>
+    `;
+}
+
 socket.on('estado_actual', (estado) => {
-    if (estado.activa && !votoEnviado) {
+    if (estado.fin) {
+        renderizarFin();
+    } else if (estado.activa && !votoEnviado) {
         renderizarBotones();
     } else if (!votoEnviado) {
         renderizarEspera();
@@ -53,10 +61,27 @@ socket.on('estado_actual', (estado) => {
 });
 
 socket.on('votacion_abierta', () => {
-    votoEnviado = false; // Reiniciamos el bloqueo para la nueva parada
+    votoEnviado = false;
     renderizarBotones();
 });
 
 socket.on('votacion_cerrada', () => {
     renderizarEspera();
+});
+
+// NUEVO: Escucha el final de la historia
+socket.on('simulacion_finalizada', () => {
+    renderizarFin();
+});
+
+// NUEVO: Escucha el botón de reinicio masivo del facilitador
+socket.on('expulsar_clientes', () => {
+    pantallaCelular.innerHTML = `
+        <div class="mensaje-exito">
+            <h2>Taller finalizado 🔄</h2>
+            <p>La sesión ha sido cerrada.</p>
+            <p>Si estás en un nuevo taller, volvé a escanear el QR.</p>
+        </div>
+    `;
+    socket.disconnect(); // Corta la conexión con el servidor permanentemente
 });
