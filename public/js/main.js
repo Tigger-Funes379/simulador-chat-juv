@@ -23,7 +23,7 @@ const guion = [
     { tipo: 'msj', emisor: 'Mati', texto: 'Yo tampoco, pero recién lo vi a Lucas guardando algo rápido en la mochila antes de salir al recreo 👀.' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Naaa, ¿posta? Lucas no seas careta, devolveme la plata loco.' },
     { tipo: 'msj', emisor: 'Lucas', texto: '¿Qué flashan? Yo guardé mi botellita de agua. No toqué la plata de nadie, dejen de acusar sin saber.' },
-    { tipo: 'msj', emisor: 'Camila', texto: '📷 (Foto de Lucas editada con sticker de "CHORRO")' },
+    { tipo: 'msj', emisor: 'Camila', imagen: 'img/pibe.png' },
     { tipo: 'msj', emisor: 'Mati', texto: 'JAAAAJAJAJA 💀💀💀' },
     { tipo: 'msj', emisor: 'Camila', texto: 'Si no aparece la plata, esta foto va directo al perfil del colegio o a un sticker para todos los grupos.' },
     { 
@@ -132,10 +132,19 @@ function avanzarHistoria() {
 
     if (actual.tipo === 'msj') {
         const alineacion = (actual.emisor === perspectivaActual) ? 'der' : 'izq';
+        
+        // Evaluamos si el mensaje tiene texto normal o si es una imagen
+        let contenidoMensaje = '';
+        if (actual.texto) {
+            contenidoMensaje = `<span class="texto">${actual.texto}</span>`;
+        } else if (actual.imagen) {
+            contenidoMensaje = `<img src="${actual.imagen}" alt="Foto enviada" class="mensaje-imagen">`;
+        }
+
         chatContainer.innerHTML += `
             <div class="mensaje ${alineacion}">
                 <span class="emisor emisor-${actual.emisor}">${actual.emisor}</span> 
-                <span class="texto">${actual.texto}</span>
+                ${contenidoMensaje}
             </div>
         `;
     } else if (actual.tipo === 'sistema') {
