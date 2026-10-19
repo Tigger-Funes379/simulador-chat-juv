@@ -1,5 +1,10 @@
 const socket = io();
 
+// --- CARGA DE SONIDOS ---
+const sonidoMensaje = new Audio('audio/mensaje.mp3');
+const sonidoParada = new Audio('audio/parada.mp3');
+const sonidoGanador = new Audio('audio/ganador.mp3');
+
 let contadores = { A: 0, B: 0, C: 0 };
 let enModoVotacion = false;
 let perspectivaActual = 'Nico'; 
@@ -8,7 +13,7 @@ const chatContainer = document.getElementById('chat-container');
 const overlayParada = document.getElementById('overlay-parada');
 const overlayFin = document.getElementById('overlay-fin');
 
-// 1. Cargamos las imágenes correspondientes a cada escena
+// 1. Cargamos el guion con las imágenes locales
 const guion = [
     // --- ESCENA 1: GRUPO (Perspectiva Nico) ---
     { 
@@ -16,7 +21,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'img/grupo.jpg' // Avatar local
+        avatar: 'img/grupo.png' 
     },
     { tipo: 'msj', emisor: 'Nico', texto: 'Che, ¿alguien vio el buzo que dejé en el banco de atrás? Tenía $15.000 adentro para la fotocopiadora.' },
     { tipo: 'msj', emisor: 'Sofí', texto: 'Yo no vi nada.' },
@@ -43,7 +48,7 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'img/desconocido.jpg' // Avatar de número incógnito local
+                    avatar: 'img/desconocido.png' 
                 },
                 { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Coacción (Apriete) / Difamación.' }
             ],
@@ -56,7 +61,7 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'img/desconocido.jpg' // Avatar de número incógnito local
+                    avatar: 'img/desconocido.png' 
                 },
                 { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Extorsión / Difamación.' }
             ]
@@ -84,7 +89,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'img/grupo.jpg' // Vuelve al avatar grupal local
+        avatar: 'img/grupo.png' 
     },
     { tipo: 'sistema', texto: 'Lunes, 10:30 AM. Tres días después.' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Gente, me llegó una citación de la fiscalía a mi casa. Mis viejos me quieren matar.' },
@@ -108,7 +113,6 @@ const guion = [
 
 let pasoActual = 0;
 
-// 2. Hacemos que "cambio_escena" actualice el avatar de forma interactiva
 function avanzarHistoria() {
     if (enModoVotacion || pasoActual >= guion.length) return;
 
@@ -120,7 +124,6 @@ function avanzarHistoria() {
         document.getElementById('chat-titulo').innerText = actual.titulo;
         document.getElementById('chat-subtitulo').innerText = actual.subtitulo;
         
-        // Actualizamos la foto de perfil en el avatar si existe en el objeto
         if (actual.avatar) {
             document.getElementById('chat-avatar').src = actual.avatar;
         }
@@ -131,9 +134,11 @@ function avanzarHistoria() {
     }
 
     if (actual.tipo === 'msj') {
+        // Reproducir sonido de mensaje (el .catch evita errores si el navegador bloquea el autoplay inicial)
+        sonidoMensaje.play().catch(() => {});
+
         const alineacion = (actual.emisor === perspectivaActual) ? 'der' : 'izq';
         
-        // Evaluamos si el mensaje tiene texto normal o si es una imagen
         let contenidoMensaje = '';
         if (actual.texto) {
             contenidoMensaje = `<span class="texto">${actual.texto}</span>`;
@@ -150,6 +155,9 @@ function avanzarHistoria() {
     } else if (actual.tipo === 'sistema') {
         chatContainer.innerHTML += `<div class="mensaje-sistema"><span>${actual.texto}</span></div>`;
     } else if (actual.tipo === 'parada') {
+        // Reproducir sonido de Parada Dilemática
+        sonidoParada.play().catch(() => {});
+
         enModoVotacion = true;
         document.getElementById('overlay-titulo').innerText = `🛑 PARADA ${actual.numero}: ${actual.titulo}`;
         document.getElementById('overlay-pregunta').innerText = actual.pregunta;
@@ -162,7 +170,7 @@ function avanzarHistoria() {
         
     } else if (actual.tipo === 'fin_simulacion') {
         overlayFin.style.display = 'flex';
-        socket.emit('fin_simulacion'); // Le avisa al servidor que terminó
+        socket.emit('fin_simulacion'); 
     }
 
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -176,7 +184,6 @@ socket.on('actualizar_votos', (opcion) => {
     }
 });
 
-// Mostrar la cantidad de participantes en vivo
 socket.on('actualizar_participantes', (cantidad) => {
     const contador = document.getElementById('contador-participantes');
     if (contador) contador.innerText = `👥 Participantes: ${cantidad}`;
@@ -186,39 +193,57 @@ document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
         avanzarHistoria();
     } else if (e.code === 'Enter' && enModoVotacion) {
+        // 1. Bloqueamos que apreten Enter de vuelta
         enModoVotacion = false;
-        overlayParada.style.display = 'none';
         
+        // 2. Buscamos al ganador
         let ganador = 'A'; 
         let maxVotos = contadores.A;
         if (contadores.B > maxVotos) { ganador = 'B'; maxVotos = contadores.B; }
         if (contadores.C > maxVotos) { ganador = 'C'; maxVotos = contadores.C; }
 
-        let paradaActual = guion[pasoActual - 1];
-        if (paradaActual.ramificacion) {
-            let ramaElegida = [];
-            if (ganador === 'A' || ganador === 'B') {
-                ramaElegida = paradaActual.ramificacion.opcionA_B;
-            } else if (ganador === 'C') {
-                ramaElegida = paradaActual.ramificacion.opcionC;
+        // 3. Reproducimos el sonido del ganador y aplicamos estilos para resaltarlo
+        sonidoGanador.play().catch(() => {});
+        const cajaGanadora = document.querySelector(`.opcion-item.${ganador}`);
+        cajaGanadora.style.transform = 'scale(1.05)';
+        cajaGanadora.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.8)';
+        cajaGanadora.style.border = '3px solid #fff';
+        cajaGanadora.style.transition = 'all 0.3s ease';
+
+        // 4. Esperamos 2.5 segundos para que todos vean la opción ganadora iluminada
+        setTimeout(() => {
+            // Restauramos los estilos por si se vuelve a usar esa caja
+            cajaGanadora.style.transform = 'none';
+            cajaGanadora.style.boxShadow = 'none';
+            cajaGanadora.style.border = 'none';
+            
+            overlayParada.style.display = 'none';
+
+            let paradaActual = guion[pasoActual - 1];
+            if (paradaActual.ramificacion) {
+                let ramaElegida = [];
+                if (ganador === 'A' || ganador === 'B') {
+                    ramaElegida = paradaActual.ramificacion.opcionA_B;
+                } else if (ganador === 'C') {
+                    ramaElegida = paradaActual.ramificacion.opcionC;
+                }
+                guion.splice(pasoActual, 0, ...ramaElegida);
             }
-            guion.splice(pasoActual, 0, ...ramaElegida);
-        }
 
-        contadores = { A: 0, B: 0, C: 0 };
-        document.getElementById('votos-A').innerText = '0';
-        document.getElementById('votos-B').innerText = '0';
-        document.getElementById('votos-C').innerText = '0';
-        
-        socket.emit('cerrar_votacion'); 
-        
-        avanzarHistoria();
+            contadores = { A: 0, B: 0, C: 0 };
+            document.getElementById('votos-A').innerText = '0';
+            document.getElementById('votos-B').innerText = '0';
+            document.getElementById('votos-C').innerText = '0';
+            
+            socket.emit('cerrar_votacion'); 
+            
+            avanzarHistoria();
+        }, 2500); // 2500 milisegundos = 2.5 segundos de pausa dramática
 
-    // NUEVO CONTROL: TECLA "R" PARA REINICIAR EL TALLER MASIVAMENTE
     } else if (e.code === 'KeyR') {
         if (confirm('⚠️ ¿Estás seguro de que querés REINICIAR el taller? Esto expulsará a todos los celulares conectados y empezará la historia desde cero.')) {
             socket.emit('reiniciar_taller');
-            location.reload(); // Recarga la página del proyector para empezar limpio
+            location.reload(); 
         }
     }
 });
