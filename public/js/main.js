@@ -4,6 +4,7 @@ const socket = io();
 const sonidoMensaje = new Audio('audio/mensaje.mp3');
 const sonidoParada = new Audio('audio/parada.mp3');
 const sonidoGanador = new Audio('audio/ganador.mp3');
+const sonidoEvento = new Audio('audio/evento.mp3');   // El nuevo sonido para el sistema
 
 let contadores = { A: 0, B: 0, C: 0 };
 let enModoVotacion = false;
@@ -134,11 +135,9 @@ function avanzarHistoria() {
     }
 
     if (actual.tipo === 'msj') {
-        // Reproducir sonido de mensaje (el .catch evita errores si el navegador bloquea el autoplay inicial)
-        sonidoMensaje.play().catch(() => {});
-
         const alineacion = (actual.emisor === perspectivaActual) ? 'der' : 'izq';
         
+        // Evaluamos si el mensaje tiene texto normal o si es una imagen
         let contenidoMensaje = '';
         if (actual.texto) {
             contenidoMensaje = `<span class="texto">${actual.texto}</span>`;
@@ -152,8 +151,17 @@ function avanzarHistoria() {
                 ${contenidoMensaje}
             </div>
         `;
+        
+        sonidoMensaje.currentTime = 0;
+        sonidoMensaje.play().catch(e => console.log(e));
+
     } else if (actual.tipo === 'sistema') {
         chatContainer.innerHTML += `<div class="mensaje-sistema"><span>${actual.texto}</span></div>`;
+        
+        // Disparamos el sonido exclusivo para eventos de sistema
+        sonidoEvento.currentTime = 0;
+        sonidoEvento.play().catch(e => console.log(e));
+
     } else if (actual.tipo === 'parada') {
         // Reproducir sonido de Parada Dilemática
         sonidoParada.play().catch(() => {});
@@ -202,8 +210,9 @@ document.addEventListener('keydown', (e) => {
         if (contadores.B > maxVotos) { ganador = 'B'; maxVotos = contadores.B; }
         if (contadores.C > maxVotos) { ganador = 'C'; maxVotos = contadores.C; }
 
-        // 3. Reproducimos el sonido del ganador y aplicamos estilos para resaltarlo
-        sonidoGanador.play().catch(() => {});
+        // Dispara el sonido de tu archivo ganador.mp3
+        sonidoGanador.currentTime = 0;
+        sonidoGanador.play().catch(e => console.log(e));
         const cajaGanadora = document.querySelector(`.opcion-item.${ganador}`);
         cajaGanadora.style.transform = 'scale(1.05)';
         cajaGanadora.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.8)';
