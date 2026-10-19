@@ -130,7 +130,7 @@ function avanzarHistoria() {
         }
         
         pasoActual++;
-        avanzarHistoria(); 
+
         return;
     }
 
@@ -192,9 +192,15 @@ socket.on('actualizar_votos', (opcion) => {
     }
 });
 
+// Mostrar la cantidad de participantes en vivo
 socket.on('actualizar_participantes', (cantidad) => {
+    // Actualiza el contador original arriba a la derecha (si lo mantuviste)
     const contador = document.getElementById('contador-participantes');
     if (contador) contador.innerText = `👥 Participantes: ${cantidad}`;
+    
+    // Actualiza el nuevo contador debajo del QR
+    const contadorQR = document.getElementById('contador-qr');
+    if (contadorQR) contadorQR.innerText = `👥 Participantes: ${cantidad}`;
 });
 
 document.addEventListener('keydown', (e) => {
