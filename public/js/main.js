@@ -21,7 +21,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'img/grupo.png' 
+        avatar: 'img/grupo.jpg' 
     },
     { tipo: 'msj', emisor: 'Nico', texto: 'Che, ¿alguien vio el buzo que dejé en el banco de atrás? Tenía $15.000 adentro para la fotocopiadora.' },
     { tipo: 'msj', emisor: 'Sofí', texto: 'Yo no vi nada.' },
@@ -48,7 +48,7 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'img/desconocido.png' 
+                    avatar: 'img/desconocido.jpg' 
                 },
                 { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Coacción (Apriete) / Difamación.' }
             ],
@@ -61,7 +61,7 @@ const guion = [
                     perspectiva: 'Lucas', 
                     titulo: 'Número Desconocido', 
                     subtitulo: 'en línea',
-                    avatar: 'img/desconocido.png' 
+                    avatar: 'img/desconocido.jpg' 
                 },
                 { tipo: 'sistema', texto: '⚠️ RIESGO DETECTADO: Delito contra la Intimidad / Extorsión / Difamación.' }
             ]
@@ -89,7 +89,7 @@ const guion = [
         perspectiva: 'Nico', 
         titulo: 'Promo 5to - Oficial 🎓🔥', 
         subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...',
-        avatar: 'img/grupo.png' 
+        avatar: 'img/grupo.jpg' 
     },
     { tipo: 'sistema', texto: 'Lunes, 10:30 AM. Tres días después.' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Gente, me llegó una citación de la fiscalía a mi casa. Mis viejos me quieren matar.' },
