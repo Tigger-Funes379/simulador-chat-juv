@@ -492,3 +492,34 @@ body {
     border-radius: 10px;
     border: 2px solid #43a047;
 }
+/* --- BARRA DE PROGRESO DEL QR --- */
+.contenedor-progreso-qr {
+    width: 100%;
+    margin-top: 25px;
+    text-align: center;
+}
+
+#texto-progreso-qr {
+    font-size: 1.1rem;
+    color: #ccc;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.barra-progreso-fondo {
+    width: 100%;
+    height: 14px;
+    background-color: #333;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #555;
+}
+
+.barra-progreso-llena {
+    height: 100%;
+    width: 0%; /* Arranca vacía */
+    background-color: #43a047;
+    border-radius: 8px;
+    transition: width 0.4s ease-out; /* Animación fluida al llenarse */
+    box-shadow: 0 0 15px rgba(67, 160, 71, 0.6);
+}
