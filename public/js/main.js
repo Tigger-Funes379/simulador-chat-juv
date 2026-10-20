@@ -124,7 +124,7 @@ function actualizarBarraProgreso() {
     const barraLlena = document.getElementById('barra-progreso-llena');
     
     if (textoProgreso && barraLlena) {
-        textoProgreso.innerText = `Participantes: _ ${totalVotos} de ${totalParticipantesActuales} respondieron`;
+        textoProgreso.innerText = `Participantes:  ${totalVotos} de ${totalParticipantesActuales} respondieron`;
         
         let porcentaje = 0;
         if (totalParticipantesActuales > 0) {
