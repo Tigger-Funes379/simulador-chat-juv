@@ -8,28 +8,62 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-let estadoVotacion = {
-    activa: false,
-    opciones: null,
-    fin: false 
-};
+// === URL DE TU GOOGLE APPS SCRIPT ===
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxm-x3So3Bm56eVBDmv_cIqlJsvsMT6q-dCCCzljwCcEJRBmnjpoisN_2tdCN86O41HRQ/exec'; 
 
+// Función para enviar los datos a tu API de Sheets
+async function guardarEnSheets(datosTaller) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(datosTaller),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        
+        if(result.resultado === 'exito') {
+            console.log('✅ Balance guardado en Google Sheets con éxito.');
+        } else {
+            console.error('❌ Error en el Script:', result.error);
+        }
+    } catch (error) {
+        console.error('❌ Error de conexión con Sheets:', error);
+    }
+}
+
+let estadoVotacion = { activa: false, opciones: null, fin: false };
 let participantesConectados = 0; 
-let dispositivosUnicos = {}; // Diccionario para rastrear los IDs de los celulares
+let dispositivosUnicos = {}; 
+
+// Variable que acumula los datos del colegio actual
+let tallerActual = {
+    marcaTemporal: null,
+    totalParticipantes: 0,
+    votos: {}
+};
 
 io.on('connection', (socket) => {
     socket.emit('estado_actual', estadoVotacion);
 
     socket.on('soy_participante', (deviceId) => {
         socket.isParticipante = true;
-        socket.deviceId = deviceId; // Guardamos el ID en la conexión actual
+        socket.deviceId = deviceId;
 
-        // Si es la primera vez que vemos este celular (o no tiene pestañas abiertas)
         if (!dispositivosUnicos[deviceId]) {
-            dispositivosUnicos[deviceId] = 1; // Registramos que tiene 1 pestaña
+            dispositivosUnicos[deviceId] = 1; 
             participantesConectados++;
+            
+            // Guardamos la marca temporal en el primer escaneo
+            if (participantesConectados === 1 && !tallerActual.marcaTemporal) {
+                const ahora = new Date();
+                tallerActual.marcaTemporal = ahora.toLocaleDateString('es-AR') + ' ' + ahora.toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'});
+            }
+            
+            // Registramos el pico máximo de alumnos conectados
+            if (participantesConectados > tallerActual.totalParticipantes) {
+                tallerActual.totalParticipantes = participantesConectados;
+            }
         } else {
-            // Si ya existe, solo sumamos una pestaña más a la cuenta interna de ese dispositivo
             dispositivosUnicos[deviceId]++;
         }
         
@@ -41,9 +75,14 @@ io.on('connection', (socket) => {
         io.emit('votacion_abierta', opciones);
     });
 
-    socket.on('cerrar_votacion', () => {
+    socket.on('cerrar_votacion', (datosParada) => {
         estadoVotacion = { activa: false, opciones: null, fin: false };
         io.emit('votacion_cerrada');
+        
+        // Acumulamos los votos recibidos desde el main.js
+        tallerActual.votos[`${datosParada.parada}A`] = datosParada.A;
+        tallerActual.votos[`${datosParada.parada}B`] = datosParada.B;
+        tallerActual.votos[`${datosParada.parada}C`] = datosParada.C;
     });
 
     socket.on('fin_simulacion', () => {
@@ -55,25 +94,31 @@ io.on('connection', (socket) => {
         io.emit('actualizar_votos', opcion);
     });
 
+    // CUANDO SE APRIETA LA TECLA "R" PARA REINICIAR:
     socket.on('reiniciar_taller', () => {
+        
+        // 1. Mandamos el balance a Sheets si hubo al menos un participante
+        if (tallerActual.marcaTemporal) {
+            guardarEnSheets(tallerActual);
+        }
+
+        // 2. Reseteamos todo para el próximo colegio
         estadoVotacion = { activa: false, opciones: null, fin: false };
         participantesConectados = 0; 
-        dispositivosUnicos = {}; // Vaciamos el registro de celulares
+        dispositivosUnicos = {}; 
+        tallerActual = { marcaTemporal: null, totalParticipantes: 0, votos: {} };
+        
         io.emit('expulsar_clientes'); 
         io.emit('actualizar_participantes', participantesConectados);
     });
 
     socket.on('disconnect', () => {
-        // Al desconectarse, verificamos si era un celular con ID registrado
         if (socket.isParticipante && socket.deviceId) {
             dispositivosUnicos[socket.deviceId]--;
-            
-            // Si el dispositivo ya no tiene NINGUNA pestaña abierta, restamos del contador general
             if (dispositivosUnicos[socket.deviceId] <= 0) {
                 participantesConectados--;
-                delete dispositivosUnicos[socket.deviceId]; // Lo borramos del registro
+                delete dispositivosUnicos[socket.deviceId]; 
             }
-            
             io.emit('actualizar_participantes', participantesConectados);
         }
     });

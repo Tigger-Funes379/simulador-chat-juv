@@ -245,12 +245,21 @@ document.addEventListener('keydown', (e) => {
                 guion.splice(pasoActual, 0, ...ramaElegida);
             }
 
+            // 1. Mandamos los votos reales al servidor ANTES de borrarlos
+            socket.emit('cerrar_votacion', { 
+                parada: paradaActual.numero, 
+                A: contadores.A, 
+                B: contadores.B, 
+                C: contadores.C 
+            });
+
+            // 2. Ahora sí vaciamos los contadores para la próxima parada
             contadores = { A: 0, B: 0, C: 0 };
             document.getElementById('votos-A').innerText = '0';
             document.getElementById('votos-B').innerText = '0';
             document.getElementById('votos-C').innerText = '0';
             
-            socket.emit('cerrar_votacion'); 
+            avanzarHistoria();
             
             avanzarHistoria();
         }, 2500); // 2500 milisegundos = 2.5 segundos de pausa dramática
