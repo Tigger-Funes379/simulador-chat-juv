@@ -9,7 +9,7 @@ const io = new Server(server);
 app.use(express.static('public'));
 
 // === URL DE TU GOOGLE APPS SCRIPT ===
-const SCRIPT_URL = 'PEGÁ_ACÁ_TU_URL_DE_APPS_SCRIPT'; 
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxm-x3So3Bm56eVBDmv_cIqlJsvsMT6q-dCCCzljwCcEJRBmnjpoisN_2tdCN86O41HRQ/exec'; 
 
 async function guardarEnSheets(datosTaller) {
     try {
