@@ -29,7 +29,7 @@ const guion = [
     { tipo: 'msj', emisor: 'Sofí', texto: 'Yo no vi nada.' },
     { tipo: 'msj', emisor: 'Mati', texto: 'Yo tampoco, pero recién lo vi a Lucas guardando algo rápido en la mochila antes de salir al recreo 👀.' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Naaa, ¿posta? Lucas no seas careta, devolveme la plata loco.' },
-    { tipo: 'msj', emisor: 'Lucas', texto: '¿Qué flashan? Yo guardé mi botellita de agua. No toqué la plata de nadie, dejen de acusar sin saber.' },
+    { tipo: 'msj', emisor: 'Lucas', texto: '¿Qué flashean? Yo guardé mi botellita de agua. No toqué la plata de nadie, dejen de acusar sin saber.' },
     { tipo: 'msj', emisor: 'Camila', imagen: 'img/pibe.png' },
     { tipo: 'msj', emisor: 'Mati', texto: 'JAAAAJAJAJA 💀💀💀' },
     { tipo: 'msj', emisor: 'Camila', texto: 'Si no aparece la plata, esta foto va directo al perfil del colegio o a un sticker para todos los grupos.' },
@@ -101,7 +101,7 @@ const guion = [
     { 
         tipo: 'parada', numero: 3, 
         titulo: 'Resolución y consecuencias (Empalme Teórico)',
-        pregunta: '¿Qué creen que pasa ahora según la Ley 27.801?',
+        pregunta: '¿Qué creen que pasa ahora según la Ley 27.801 y la Ley Provincial 9.735?',
         opciones: { 
             A: '"Son menores de edad, no pasa nada, se resuelve con una amonestación en la escuela y fue."', 
             B: '"A los pibes los llevan directamente a la comisaría del menor y a los padres no les dicen nada."', 
