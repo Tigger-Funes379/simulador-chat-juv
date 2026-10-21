@@ -292,6 +292,14 @@ body {
     font-style: italic;
 }
 
+.instruccion-espacio {
+    margin-top: 25px;
+    color: #ffeb3b;
+    font-size: 1.2rem;
+    font-style: italic;
+    text-align: center;
+}
+
 /* Columna lateral del QR */
 .overlay-qr {
     flex: 1;
