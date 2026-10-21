@@ -523,3 +523,23 @@ body {
     transition: width 0.4s ease-out; /* Animación fluida al llenarse */
     box-shadow: 0 0 15px rgba(67, 160, 71, 0.6);
 }
+
+/* --- BARRA INFERIOR DEL CHAT --- */
+.pie-chat {
+    display: flex;
+    justify-content: space-between; /* Tira el texto a la izquierda y el contador a la derecha */
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.contador-participantes {
+    /* Le sacamos el position: absolute para que no flote por encima de las cosas */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #43a047;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid #43a047;
+}
