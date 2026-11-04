@@ -165,3 +165,69 @@ body.modo-oscuro .overlay-qr p { color: #aaa; }
     .overlay-info { width: 100%; }
     .overlay-qr { width: 100%; max-width: 400px; }
 }
+
+/* =========================================
+   PANTALLA CELULAR (MOBILE)
+   ========================================= */
+body#mobile-body {
+    background-color: #121212 !important;
+    color: #ffffff !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+    background-image: none !important; /* Quitamos el fondo de WhatsApp */
+}
+
+body#mobile-body h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+
+#opciones-container, #pantalla-celular {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Estilo forzado para los botones del celular */
+body#mobile-body button, .btn-voto {
+    width: 100%;
+    padding: 25px;
+    font-size: 2rem;
+    border: none;
+    border-radius: 15px;
+    color: white !important;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s;
+}
+
+/* Forzamos los colores (Por atributo o por orden de aparición) */
+body#mobile-body button:nth-of-type(1), .btn-voto[data-opcion="A"] { background-color: #e53935 !important; }
+body#mobile-body button:nth-of-type(2), .btn-voto[data-opcion="B"] { background-color: #1e88e5 !important; }
+body#mobile-body button:nth-of-type(3), .btn-voto[data-opcion="C"] { background-color: #43a047 !important; }
+
+body#mobile-body button:active, .btn-voto:active { transform: scale(0.95); }
+
+/* Mensaje cuando ya votaron */
+.mensaje-exito {
+    text-align: center;
+    background-color: #1e1e1e;
+    padding: 40px 20px;
+    border-radius: 20px;
+    border: 2px solid #43a047;
+    width: 100%;
+    max-width: 400px;
+}
+.mensaje-exito h2 { color: #43a047 !important; font-size: 2.5rem; margin-bottom: 15px; }
+.mensaje-exito p { font-size: 1.5rem; color: #ccc; }
