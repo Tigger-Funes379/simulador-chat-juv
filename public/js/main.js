@@ -1,6 +1,5 @@
 const socket = io();
 
-// --- CARGA DE SONIDOS ---
 const sonidoMensaje = new Audio('audio/mensaje.mp3');
 const sonidoParada = new Audio('audio/parada.mp3');
 const sonidoGanador = new Audio('audio/ganador.mp3');
@@ -8,14 +7,14 @@ const sonidoEvento = new Audio('audio/evento.mp3');
 
 let contadores = { A: 0, B: 0, C: 0 };
 let enModoVotacion = false;
-let votacionCerradaYEnPausa = false; // NUEVO: Controla la pausa post-votación
+let votacionCerradaYEnPausa = false; 
 let perspectivaActual = 'Nico'; 
 
 const chatContainer = document.getElementById('chat-container');
 const overlayParada = document.getElementById('overlay-parada');
 const overlayFin = document.getElementById('overlay-fin');
 
-// 1. Cargamos el guion (El texto es igual al tuyo)
+// --- GUION ---
 const guion = [
     { tipo: 'cambio_escena', perspectiva: 'Nico', titulo: 'Promo 5to - Oficial 🎓🔥', subtitulo: 'Nico, Sofí, Mati, Camila, Lucas...', avatar: 'img/grupo.jpg' },
     { tipo: 'msj', emisor: 'Nico', texto: 'Che, ¿alguien vio el buzo que dejé en el banco de atrás? Tenía $15.000 adentro para la fotocopiadora.' },
@@ -127,8 +126,9 @@ function avanzarHistoria() {
         enModoVotacion = true;
         
         // Restauramos los estilos visuales para que arranque limpia
+        document.getElementById('caja-qr').style.display = 'flex'; // Volvemos a mostrar el QR lateral
         document.getElementById('instruccion-cierre').innerText = 'Presioná ENTER para cerrar votación y debatir';
-        document.getElementById('btn-mostrar-qr').style.display = 'block';
+        
         ['A', 'B', 'C'].forEach(op => {
             const caja = document.querySelector(`.opcion-item.${op}`);
             caja.style.opacity = '1';
@@ -155,7 +155,7 @@ function avanzarHistoria() {
     pasoActual++;
 }
 
-// --- ACTUALIZACIÓN DE DATOS (Sockets) ---
+// --- ACTUALIZACIÓN DE DATOS ---
 socket.on('actualizar_votos', (opcion) => {
     if (enModoVotacion && contadores[opcion] !== undefined) {
         contadores[opcion]++;
@@ -170,7 +170,6 @@ socket.on('actualizar_participantes', (cantidad) => {
     const contadorQR = document.getElementById('contador-qr');
     if (contadorQR) contadorQR.innerText = `👥 Participantes: ${cantidad}`;
 });
-
 
 // --- LÓGICA DE BOTONES ---
 const btnTema = document.getElementById('btn-tema');
@@ -194,19 +193,16 @@ document.getElementById('btn-ocultar-qr').addEventListener('click', () => {
     document.getElementById('overlay-qr-gigante').style.display = 'none';
 });
 
-
 // --- LÓGICA DE TECLADO ---
 document.addEventListener('keydown', (e) => {
     
     if (e.code === 'Space') {
-        // 1. Si estábamos frenados DEBATIENDO la parada, la limpiamos y seguimos
         if (votacionCerradaYEnPausa) {
             votacionCerradaYEnPausa = false;
             overlayParada.style.display = 'none';
             
             let paradaActual = guion[pasoActual - 1];
             
-            // Evaluamos la ramificación con el ganador
             if (paradaActual.ramificacion) {
                 let ramaElegida = [];
                 if (paradaActual.ganador === 'A' || paradaActual.ganador === 'B') {
@@ -217,7 +213,6 @@ document.addEventListener('keydown', (e) => {
                 guion.splice(pasoActual, 0, ...ramaElegida);
             }
 
-            // Vaciamos contadores para la siguiente
             contadores = { A: 0, B: 0, C: 0 };
             document.getElementById('votos-A').innerText = '0';
             document.getElementById('votos-B').innerText = '0';
@@ -225,30 +220,27 @@ document.addEventListener('keydown', (e) => {
             
             avanzarHistoria();
         } else {
-            // Avance normal de la historia
             avanzarHistoria();
         }
         
     } else if (e.code === 'Enter' && enModoVotacion) {
         
-        // 1. Cerramos la votación pero NO SALIMOS del panel
         enModoVotacion = false;
         votacionCerradaYEnPausa = true; 
-        document.getElementById('btn-mostrar-qr').style.display = 'none'; // Escondemos el botón del QR
         
-        // 2. Buscamos al ganador
+        // Escondemos la caja del QR para que el foco quede en el debate y la opción ganadora
+        document.getElementById('caja-qr').style.display = 'none'; 
+        
         let ganador = 'A'; 
         let maxVotos = contadores.A;
         if (contadores.B > maxVotos) { ganador = 'B'; maxVotos = contadores.B; }
         if (contadores.C > maxVotos) { ganador = 'C'; maxVotos = contadores.C; }
         
-        // Guardamos quién ganó en el objeto actual para usarlo al tocar Espacio
         guion[pasoActual - 1].ganador = ganador;
 
         sonidoGanador.currentTime = 0;
         sonidoGanador.play().catch(e => console.log(e));
         
-        // 3. Efecto visual: Resaltamos el ganador y atenuamos a los perdedores
         ['A', 'B', 'C'].forEach(op => {
             const caja = document.querySelector(`.opcion-item.${op}`);
             if (op === ganador) {
@@ -256,14 +248,12 @@ document.addEventListener('keydown', (e) => {
                 caja.style.boxShadow = '0 0 30px rgba(255, 255, 255, 0.8)';
                 caja.style.border = '3px solid #fff';
             } else {
-                caja.style.opacity = '0.3'; // Los perdedores quedan casi transparentes
+                caja.style.opacity = '0.3'; 
             }
         });
 
-        // 4. Cambiamos el texto de abajo para indicar cómo seguir
         document.getElementById('instruccion-cierre').innerText = '✅ Votación Cerrada. Presioná BARRA ESPACIADORA para continuar con la historia.';
 
-        // 5. Mandamos los votos al servidor
         let paradaActual = guion[pasoActual - 1];
         socket.emit('cerrar_votacion', { 
             parada: paradaActual.numero, 

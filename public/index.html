@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="modo-claro">
-    <!-- Contador devuelto a su lugar original -->
     <div id="contador-participantes" class="contador-participantes">👥 Participantes: 0</div>
 
     <div id="pantalla-proyector">
-        <!-- El Celular en el centro -->
         <div class="columna-chat">
             <div class="cabecera-chat">
                 <img id="chat-avatar" src="img/grupo.jpg" alt="Avatar" class="avatar-grupo">
@@ -24,7 +22,6 @@
             
             <div id="chat-container"></div>
             
-            <!-- PIE DEL CHAT (Restaurado con borde superior) -->
             <div class="pie-chat">
                 <p class="instruccion-proyector">Presioná la BARRA ESPACIADORA para avanzar</p>
                 <button id="btn-tema" class="btn-extra">🌙 Modo Oscuro</button>
@@ -35,7 +32,8 @@
     <!-- PANTALLA SUPERPUESTA DE PARADA DILEMÁTICA -->
     <div id="overlay-parada" style="display: none;">
         <div class="overlay-contenido">
-            <!-- Columna principal con la pregunta y opciones -->
+            
+            <!-- Columna Izquierda: Preguntas y Opciones -->
             <div class="overlay-info">
                 <h2 id="overlay-titulo">🛑 PARADA X</h2>
                 <p id="overlay-pregunta">Pregunta de la parada</p>
@@ -54,30 +52,37 @@
                         <div class="opcion-votos" id="votos-C">0</div>
                     </div>
                 </div>
-                <!-- Esta instrucción se esconde cuando cerramos la votación -->
                 <p id="instruccion-cierre" class="instruccion-enter">Presioná ENTER para cerrar votación y debatir</p>
             </div>
             
-            <!-- Botón flotante para llamar al QR gigante -->
-            <button id="btn-mostrar-qr" class="btn-flotante-qr">📱 Mostrar QR</button>
+            <!-- Columna Derecha: QR Lateral -->
+            <div id="caja-qr" class="overlay-qr">
+                <h3>¡Votá acá!</h3>
+                <button id="btn-mostrar-qr" class="btn-extra">🔍 Agrandar QR</button>
+                <div class="qr-placeholder" style="margin-top: 15px;">
+                    <!-- ACORDATE DE PONER TU LINK DE NETLIFY ACÁ -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=http://TULINK.netlify.app/mobile.html" alt="Código QR para votar">
+                </div>
+                <p>Escaneá con tu celular</p>
+                <p id="contador-qr" class="contador-qr">👥 Participantes: 0</p>
+            </div>
+
         </div>
     </div>
 
-    <!-- OVERLAY DEL QR (Ahora es un cartel gigante e independiente en el centro) -->
+    <!-- OVERLAY DEL QR GIGANTE (Popup central) -->
     <div id="overlay-qr-gigante" style="display: none;">
         <div class="qr-gigante-contenido">
             <h3>¡Votá acá!</h3>
-            <div class="qr-placeholder">
-                <!-- ACORDATE DE PONER TU LINK DE NETLIFY ACÁ -->
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=http://TULINK.netlify.app/mobile.html" alt="Código QR para votar">
+            <div class="qr-placeholder-gigante">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=http://TULINK.netlify.app/mobile.html" alt="Código QR gigante">
             </div>
             <p>Escaneá con tu celular</p>
-            <p id="contador-qr" class="contador-qr">👥 Participantes: 0</p>
             <button id="btn-ocultar-qr" class="btn-extra" style="margin-top: 20px;">Cerrar QR</button>
         </div>
     </div>
 
-    <!-- PANTALLA SUPERPUESTA DE FIN DE SIMULACIÓN -->
+    <!-- PANTALLA DE FIN DE SIMULACIÓN -->
     <div id="overlay-fin" style="display: none;">
         <div class="overlay-contenido fin-contenido">
             <h1>🛑 FIN DE LA SIMULACIÓN 🛑</h1>
