@@ -531,3 +531,100 @@ body {
     transition: width 0.4s ease-out; /* Animación fluida al llenarse */
     box-shadow: 0 0 15px rgba(67, 160, 71, 0.6);
 }
+/* --- BARRA INFERIOR DEL CHAT --- */
+.pie-chat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+.contador-participantes {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #43a047;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid #43a047;
+}
+
+/* --- BOTONES EXTRAS (TEMA Y QR) --- */
+.btn-extra {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.btn-extra:hover {
+    transform: scale(1.05);
+}
+
+/* --- EFECTO AGRANDAR QR --- */
+.overlay-qr {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overlay-qr.qr-ampliado {
+    transform: scale(1.6);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+}
+
+.contador-qr {
+    font-size: 1.2rem;
+    color: #43a047;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* --- MODO CLARO (Sobrescribe los colores por defecto) --- */
+body.modo-claro {
+    background-color: #efeae2;
+    color: #111b21;
+}
+
+body.modo-claro .cabecera {
+    background-color: #f0f2f5;
+    color: #111b21;
+    border-bottom: 1px solid #d1d7db;
+}
+
+body.modo-claro .chat-container {
+    background-color: #efeae2;
+}
+
+body.modo-claro .mensaje.izq {
+    background-color: #fff;
+    color: #111b21;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+body.modo-claro .mensaje.der {
+    background-color: #d9fdd3;
+    color: #111b21;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+body.modo-claro .mensaje-sistema {
+    background-color: #ffeecd;
+    color: #54656f;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+body.modo-claro .instruccion-proyector {
+    color: #54656f;
+    text-shadow: none;
+}
+
+body.modo-claro .btn-extra {
+    background-color: #ddd;
+    color: #111b21;
+}

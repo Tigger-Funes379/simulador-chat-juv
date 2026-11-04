@@ -9,7 +9,7 @@ const sonidoEvento = new Audio('audio/evento.mp3');   // El nuevo sonido para el
 let contadores = { A: 0, B: 0, C: 0 };
 let enModoVotacion = false;
 let perspectivaActual = 'Nico'; 
-let totalParticipantesActuales = 0;
+let esperandoContinuacion = false;
 
 const chatContainer = document.getElementById('chat-container');
 const overlayParada = document.getElementById('overlay-parada');
@@ -115,26 +115,6 @@ const guion = [
 
 let pasoActual = 0;
 
-// Actualiza los textos y el ancho de la barra de progreso
-function actualizarBarraProgreso() {
-    if (!enModoVotacion) return;
-    
-    const totalVotos = contadores.A + contadores.B + contadores.C;
-    const textoProgreso = document.getElementById('texto-progreso-qr');
-    const barraLlena = document.getElementById('barra-progreso-llena');
-    
-    if (textoProgreso && barraLlena) {
-        textoProgreso.innerText = `Participantes:  ${totalVotos} de ${totalParticipantesActuales} respondieron`;
-        
-        let porcentaje = 0;
-        if (totalParticipantesActuales > 0) {
-            porcentaje = (totalVotos / totalParticipantesActuales) * 100;
-            if (porcentaje > 100) porcentaje = 100; // Evita que se pase del borde
-        }
-        barraLlena.style.width = `${porcentaje}%`;
-    }
-}
-
 function avanzarHistoria() {
     if (enModoVotacion || pasoActual >= guion.length) return;
 
@@ -196,7 +176,6 @@ function avanzarHistoria() {
         overlayParada.style.display = 'flex';
 
         socket.emit('abrir_votacion', actual.opciones);
-        actualizarBarraProgreso(); // Resetea la barra al abrir
         
     } else if (actual.tipo === 'fin_simulacion') {
         overlayFin.style.display = 'flex';
@@ -211,24 +190,56 @@ socket.on('actualizar_votos', (opcion) => {
     if (enModoVotacion && contadores[opcion] !== undefined) {
         contadores[opcion]++;
         document.getElementById(`votos-${opcion}`).innerText = contadores[opcion];
-        actualizarBarraProgreso(); // Llama a actualizar la barra
     }
 });
 
 // Mostrar la cantidad de participantes en vivo
 socket.on('actualizar_participantes', (cantidad) => {
-    totalParticipantesActuales = cantidad;
-    
-    // Mantiene el contador general de arriba a la derecha
     const contador = document.getElementById('contador-participantes');
     if (contador) contador.innerText = `👥 Participantes: ${cantidad}`;
     
-    actualizarBarraProgreso(); // Ajusta la barra si alguien se conecta en plena votación
+    const contadorQR = document.getElementById('contador-qr');
+    if (contadorQR) contadorQR.innerText = `👥 Participantes: ${cantidad}`;
 });
 
+// --- LÓGICA DE BOTONES EXTRAS ---
+const btnTema = document.getElementById('btn-tema');
+if (btnTema) {
+    btnTema.addEventListener('click', (e) => {
+        document.body.classList.toggle('modo-claro');
+        if (document.body.classList.contains('modo-claro')) {
+            e.target.innerText = '🌙 Modo Oscuro';
+        } else {
+            e.target.innerText = '☀️ Modo Claro';
+        }
+    });
+}
+
+const btnAgrandarQR = document.getElementById('btn-agrandar-qr');
+if (btnAgrandarQR) {
+    btnAgrandarQR.addEventListener('click', (e) => {
+        const cajaQR = document.getElementById('caja-qr');
+        cajaQR.classList.toggle('qr-ampliado');
+        if (cajaQR.classList.contains('qr-ampliado')) {
+            e.target.innerText = '❌ Achicar QR';
+        } else {
+            e.target.innerText = '🔍 Agrandar QR';
+        }
+    });
+}
+
+// --- LÓGICA DE TECLADO ---
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
-        avanzarHistoria();
+        // Si estábamos en la pantalla de pausa post-votación
+        if (esperandoContinuacion) {
+            esperandoContinuacion = false;
+            document.getElementById('overlay-continuar').style.display = 'none';
+            avanzarHistoria();
+        } else {
+            avanzarHistoria();
+        }
+        
     } else if (e.code === 'Enter' && enModoVotacion) {
         // 1. Bloqueamos que apreten Enter de vuelta
         enModoVotacion = false;
@@ -282,9 +293,10 @@ document.addEventListener('keydown', (e) => {
             document.getElementById('votos-B').innerText = '0';
             document.getElementById('votos-C').innerText = '0';
             
-            avanzarHistoria();
-            
-            avanzarHistoria();
+            // ACÁ ESTÁ EL FRENO: Mostramos la pantalla de pausa y esperamos la tecla Espacio
+            document.getElementById('overlay-continuar').style.display = 'flex';
+            esperandoContinuacion = true;
+
         }, 2500); // 2500 milisegundos = 2.5 segundos de pausa dramática
 
     } else if (e.code === 'KeyR') {
