@@ -206,11 +206,11 @@ socket.on('actualizar_participantes', (cantidad) => {
 const btnTema = document.getElementById('btn-tema');
 if (btnTema) {
     btnTema.addEventListener('click', (e) => {
-        document.body.classList.toggle('modo-claro');
-        if (document.body.classList.contains('modo-claro')) {
-            e.target.innerText = '🌙 Modo Oscuro';
-        } else {
+        document.body.classList.toggle('modo-oscuro');
+        if (document.body.classList.contains('modo-oscuro')) {
             e.target.innerText = '☀️ Modo Claro';
+        } else {
+            e.target.innerText = '🌙 Modo Oscuro';
         }
     });
 }

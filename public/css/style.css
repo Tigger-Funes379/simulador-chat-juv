@@ -1,18 +1,8 @@
-/* --- ESTILOS GLOBALES --- */
-/* --- CONTADOR DE PARTICIPANTES --- */
-.contador-participantes {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #43a047;
-    padding: 10px 20px;
-    border-radius: 15px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border: 2px solid #43a047;
-    z-index: 600;
-}
+/* =========================================
+   SIMULADOR DE CHAT - HOJA DE ESTILOS V2
+   ========================================= */
+
+/* --- ESTILOS BASE (MODO CLARO) --- */
 * {
     margin: 0;
     padding: 0;
@@ -21,61 +11,72 @@
 }
 
 body {
-    background-color: #121212;
-    color: #ffffff;
+    background-color: #efeae2; /* Fondo claro de WhatsApp */
+    color: #111b21;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     overflow: hidden;
 }
 
-/* --- PANTALLA PROYECTOR --- */
 #pantalla-proyector {
     display: flex;
-    height: calc(100vh - 80px); /* Le restamos los 80px de la franja negra */
+    height: calc(100vh - 80px); /* Resta el footer */
     padding: 20px;
     gap: 30px;
     justify-content: center;
+    align-items: center;
 }
 
-/* Columna del Chat (Simulación de Celular) */
+/* --- COLUMNA DEL CHAT --- */
 .columna-chat {
-    flex: none;
     width: 60%;
     max-width: 800px;
-    background-color: #0b141a;
+    height: 90vh;
+    background-color: #efeae2;
     border-radius: 20px;
-    border: 4px solid #2a3942;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Fondo con el doodle clásico de WhatsApp */
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); 
+    background-repeat: repeat;
+    background-size: 400px;
+    background-blend-mode: overlay;
+    opacity: 0.95;
 }
 
 .cabecera-chat {
-    background-color: #202c33;
-    padding: 15px 20px;
+    background-color: #f0f2f5;
+    padding: 15px 25px;
     display: flex;
     align-items: center;
     gap: 15px;
-    border-bottom: 1px solid #2a3942;
+    border-bottom: 1px solid #d1d7db;
+    z-index: 10;
 }
 
 .avatar-grupo {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
+    object-fit: cover;
     background-color: #fff;
 }
 
 .info-grupo h2 {
     font-size: 1.5rem;
+    color: #111b21;
     margin-bottom: 2px;
 }
 
 .info-grupo p {
     font-size: 0.9rem;
-    color: #8696a0;
+    color: #54656f;
 }
 
-/* Contenedor donde caen los mensajes */
 #chat-container {
     flex: 1;
     padding: 30px;
@@ -83,97 +84,117 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-    background-blend-mode: overlay;
-    background-color: #0b141a;
-    opacity: 0.9;
+    z-index: 10;
 }
 
-/* --- ESTILOS DE LOS MENSAJES (BURBUJAS) --- */
+/* --- BURBUJAS DE CHAT (CLARAS) --- */
 .mensaje {
     max-width: 75%;
     padding: 12px 18px;
     border-radius: 12px;
     font-size: 1.4rem;
     position: relative;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     animation: aparecer 0.3s ease-out;
 }
 
 @keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .mensaje.izq {
-    background-color: #202c33;
-    color: #e9edef;
     align-self: flex-start;
+    background-color: #fff;
+    color: #111b21;
     border-top-left-radius: 0;
 }
 
 .mensaje.der {
-    background-color: #005c4b;
-    color: #e9edef;
     align-self: flex-end;
+    background-color: #d9fdd3;
+    color: #111b21;
     border-top-right-radius: 0;
 }
 
-/* Colores para cada personaje del chat */
+.mensaje-imagen {
+    max-width: 250px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 8px;
+    display: block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Nombres emisores */
 .emisor {
     font-weight: bold;
     font-size: 1.1rem;
     margin-bottom: 5px;
     display: block;
 }
+.emisor-Nico { color: #53bdeb; }
+.emisor-Sofí { color: #f06292; }
+.emisor-Mati { color: #a5d6a7; }
+.emisor-Lucas { color: #ffb74d; }
+.emisor-Camila { color: #ba68c8; }
 
-.emisor-Nico {
-    color: #53bdeb;
-}
-
-.emisor-Sofí {
-    color: #f06292;
-}
-
-.emisor-Mati {
-    color: #a5d6a7;
-}
-
-.emisor-Lucas {
-    color: #ffb74d;
-}
-
-.emisor-Camila {
-    color: #ba68c8;
-}
-
-/* --- MENSAJES DEL SISTEMA (NOTAS GRISES) --- */
 .mensaje-sistema {
+    align-self: center;
+    background-color: #ffeecd;
+    color: #54656f;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     text-align: center;
-    margin: 10px 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    max-width: 80%;
 }
 
-.mensaje-sistema span {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #ffd54f;
+/* --- BARRA INFERIOR DEL CHAT (CONTROLES Y CONTADOR) --- */
+.pie-chat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
+    z-index: 10;
+}
+
+.instruccion-proyector {
+    color: #54656f;
+    font-size: 1.1rem;
+    font-style: italic;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.contador-participantes {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #43a047;
     padding: 8px 15px;
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: bold;
-    max-width: 80%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    border: 2px solid #43a047;
 }
 
-/* --- OVERLAY SUPERPUESTO DE PARADA --- */
+.btn-extra {
+    background-color: #ddd;
+    color: #111b21;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+.btn-extra:hover { transform: scale(1.05); }
+
+/* --- OVERLAY DE PARADA DILEMÁTICA --- */
 #overlay-parada {
     position: fixed;
     top: 0;
@@ -187,7 +208,7 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
-    padding: 20px; /* Da un respiro en los bordes */
+    padding: 20px;
 }
 
 .overlay-contenido {
@@ -196,82 +217,50 @@ body {
     border-radius: 20px;
     padding: 40px;
     display: flex;
-    flex-wrap: wrap; /* Esto es clave para que sea responsivo */
+    flex-wrap: wrap;
     gap: 40px;
     max-width: 1200px;
     width: 100%;
-    max-height: 95vh; /* Evita que el cuadro sea más alto que la pantalla */
-    overflow-y: auto; /* Si el texto es inmenso, permite scrollear */
+    max-height: 95vh;
+    overflow-y: auto;
     box-shadow: 0 0 50px rgba(255, 82, 82, 0.3);
     animation: zoomIn 0.3s ease-out;
 }
 
 @keyframes zoomIn {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .overlay-info {
     flex: 2;
-    min-width: 300px; /* Para que no se aplaste en pantallas chicas */
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-#overlay-titulo {
-    color: #ff5252;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
+#overlay-titulo { color: #ff5252; font-size: 2.5rem; margin-bottom: 10px; }
+#overlay-pregunta { font-size: 1.6rem; margin-bottom: 25px; color: #ccc; line-height: 1.4; }
 
-#overlay-pregunta {
-    font-size: 1.6rem;
-    margin-bottom: 25px;
-    color: #ccc;
-    line-height: 1.4;
-}
-
-/* Lista de opciones en el overlay */
-.opciones-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+.opciones-lista { display: flex; flex-direction: column; gap: 15px; }
 
 .opcion-item {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Centra verticalmente el número con el texto */
-    font-size: 1.3rem; /* Un toque más chico para que los textos largos respiren */
+    align-items: center;
+    font-size: 1.3rem;
     padding: 15px 25px;
     border-radius: 12px;
     font-weight: bold;
-    gap: 20px; /* Espacio entre el texto y la caja de votos */
+    gap: 20px;
 }
 
-.opcion-item.A {
-    background-color: #e53935;
-}
+.opcion-item.A { background-color: #e53935; }
+.opcion-item.B { background-color: #1e88e5; }
+.opcion-item.C { background-color: #43a047; }
 
-.opcion-item.B {
-    background-color: #1e88e5;
-}
-
-.opcion-item.C {
-    background-color: #43a047;
-}
-
-.opcion-texto {
-    flex: 1;
-    line-height: 1.3; /* Separa los renglones para que se lea mejor */
-}
+.opcion-texto { flex: 1; line-height: 1.3; }
 
 .opcion-votos {
     font-size: 2.2rem;
@@ -280,27 +269,11 @@ body {
     border-radius: 8px;
     min-width: 80px;
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.instruccion-enter {
-    margin-top: 25px;
-    color: #ffeb3b;
-    font-size: 1.2rem;
-    font-style: italic;
-}
+.instruccion-enter { margin-top: 25px; color: #ffeb3b; font-size: 1.2rem; font-style: italic; }
 
-.instruccion-espacio {
-    margin-top: 25px;
-    color: #ffeb3b;
-    font-size: 1.2rem;
-    font-style: italic;
-    text-align: center;
-}
-
-/* Columna lateral del QR */
+/* --- COLUMNA LATERAL DEL QR --- */
 .overlay-qr {
     flex: 1;
     min-width: 280px; 
@@ -312,120 +285,41 @@ body {
     align-items: center;
     justify-content: center;
     border: 2px dashed #444;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Modificamos el QR para que ocupe todo su espacio */
+.overlay-qr.qr-ampliado {
+    transform: scale(1.6);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    z-index: 3000;
+}
+
 .qr-placeholder {
-    width: 100%; /* Toma todo el ancho disponible */
-    max-width: 280px; /* Evita que sea exageradamente gigante */
-    aspect-ratio: 1/1; /* Obliga a que sea un cuadrado perfecto */
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1/1;
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.overlay-qr h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #fff;
-    text-align: center;
-}
+.overlay-qr h3 { font-size: 2rem; margin-bottom: 20px; color: #fff; text-align: center; }
+.overlay-qr p { font-size: 1.2rem; color: #aaa; margin-top: 20px; text-align: center; }
 
-.overlay-qr p {
+.contador-qr {
     font-size: 1.2rem;
-    color: #aaa;
-    margin-top: 20px;
-    text-align: center;
-}
-
-/* --- MEDIA QUERIES (Para hacerlo súper responsivo) --- */
-@media (max-width: 1000px) {
-    .overlay-contenido {
-        flex-direction: column; /* Apila las opciones y el QR uno arriba del otro */
-        align-items: center;
-    }
-    .overlay-info {
-        width: 100%;
-    }
-    .overlay-qr {
-        width: 100%;
-        max-width: 400px; /* Evita que el recuadro del QR sea gigante */
-    }
-    .columna-chat {
-        width: 100%;
-    }
-}
-
-/* --- PANTALLA DEL CELULAR (MOBILE) --- */
-#pantalla-celular {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-    gap: 20px;
-    background-color: #121212;
-}
-
-#pantalla-celular h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.btn-voto {
-    width: 100%;
-    max-width: 400px;
-    padding: 25px;
-    font-size: 2rem;
-    border: none;
-    border-radius: 15px;
-    color: white;
+    color: #43a047 !important;
     font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.btn-voto[data-opcion="A"] {
-    background-color: #e53935;
-}
-
-.btn-voto[data-opcion="B"] {
-    background-color: #1e88e5;
-}
-
-.btn-voto[data-opcion="C"] {
-    background-color: #43a047;
-}
-
-.btn-voto:active {
-    transform: scale(0.95);
-}
-
-.mensaje-exito {
-    text-align: center;
-    background-color: #1e1e1e;
-    padding: 40px 20px;
-    border-radius: 20px;
+    margin-top: 15px !important;
+    background-color: rgba(67, 160, 71, 0.1);
+    padding: 10px 20px;
+    border-radius: 10px;
     border: 2px solid #43a047;
 }
 
-.mensaje-exito h2 {
-    color: #43a047;
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-}
-
-.mensaje-exito p {
-    font-size: 1.5rem;
-    color: #ccc;
-    margin-bottom: 10px;
-}
-
-/* --- OVERLAY DE FIN DE SIMULACIÓN --- */
-#overlay-fin {
+/* --- OVERLAY DE FIN / PAUSA --- */
+.overlay-fin {
     position: fixed;
     top: 0;
     left: 0;
@@ -447,18 +341,52 @@ body {
     box-shadow: 0 0 50px rgba(255, 213, 79, 0.3);
 }
 
-.fin-contenido h1 {
-    color: #ff5252;
-    font-size: 4rem;
-    margin-bottom: 20px;
+.fin-contenido h1 { color: #ff5252; font-size: 4rem; margin-bottom: 20px; }
+.fin-contenido p { font-size: 2rem; color: #ffffff; }
+
+/* --- PANTALLA CELULAR (MOBILE) --- */
+#pantalla-celular {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+    background-color: #121212;
+    color: #fff;
 }
 
-.fin-contenido p {
+#pantalla-celular h2 { font-size: 2rem; margin-bottom: 20px; text-align: center; }
+
+.btn-voto {
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
     font-size: 2rem;
-    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+.btn-voto[data-opcion="A"] { background-color: #e53935; }
+.btn-voto[data-opcion="B"] { background-color: #1e88e5; }
+.btn-voto[data-opcion="C"] { background-color: #43a047; }
+.btn-voto:active { transform: scale(0.95); }
 
-/* --- PIE DE PÁGINA --- */
+.mensaje-exito {
+    text-align: center;
+    background-color: #1e1e1e;
+    padding: 40px 20px;
+    border-radius: 20px;
+    border: 2px solid #43a047;
+}
+.mensaje-exito h2 { color: #43a047; font-size: 2.5rem; margin-bottom: 15px; }
+.mensaje-exito p { font-size: 1.5rem; color: #ccc; margin-bottom: 10px; }
+
+/* --- PIE DE PÁGINA (JUVENTUDES) --- */
 .pie-pagina {
     position: absolute;
     bottom: 0;
@@ -478,153 +406,22 @@ body {
     object-fit: contain;
 }
 
-/* --- IMÁGENES DENTRO DEL CHAT --- */
-.mensaje-imagen {
-    max-width: 250px; /* Tamaño máximo para que no ocupe toda la pantalla */
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 8px;
-    display: block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
+/* --- CLASE PARA EL MODO OSCURO --- */
+body.modo-oscuro { background-color: #111b21; color: #e9edef; }
+body.modo-oscuro .columna-chat { background-color: #0b141a; background-image: none; box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5); }
+body.modo-oscuro .cabecera-chat { background-color: #202c33; border-bottom: 1px solid #313d45; }
+body.modo-oscuro .info-grupo h2 { color: #e9edef; }
+body.modo-oscuro .info-grupo p { color: #8696a0; }
+body.modo-oscuro .mensaje.izq { background-color: #202c33; color: #e9edef; box-shadow: none; }
+body.modo-oscuro .mensaje.der { background-color: #005c4b; color: #e9edef; box-shadow: none; }
+body.modo-oscuro .mensaje-sistema { background-color: #182229; color: #8696a0; box-shadow: none; }
+body.modo-oscuro .instruccion-proyector { color: #ffeb3b; background-color: transparent; }
+body.modo-oscuro .btn-extra { background-color: #333; color: #fff; }
 
-/* --- CONTADOR DE PARTICIPANTES DENTRO DEL QR --- */
-.contador-qr {
-    margin-top: 20px !important;
-    font-size: 1.3rem !important;
-    color: #43a047 !important;
-    font-weight: bold;
-    text-align: center;
-    background-color: rgba(67, 160, 71, 0.1);
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 2px solid #43a047;
-}
-/* --- BARRA DE PROGRESO DEL QR --- */
-.contenedor-progreso-qr {
-    width: 100%;
-    margin-top: 25px;
-    text-align: center;
-}
-
-#texto-progreso-qr {
-    font-size: 1.1rem;
-    color: #ccc;
-    margin-bottom: 10px;
-    font-weight: normal;
-}
-
-.barra-progreso-fondo {
-    width: 100%;
-    height: 14px;
-    background-color: #333;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #555;
-}
-
-.barra-progreso-llena {
-    height: 100%;
-    width: 0%; /* Arranca vacía */
-    background-color: #43a047;
-    border-radius: 8px;
-    transition: width 0.4s ease-out; /* Animación fluida al llenarse */
-    box-shadow: 0 0 15px rgba(67, 160, 71, 0.6);
-}
-/* --- BARRA INFERIOR DEL CHAT --- */
-.pie-chat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    padding: 0 10px;
-}
-
-.contador-participantes {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #43a047;
-    padding: 8px 15px;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: 2px solid #43a047;
-}
-
-/* --- BOTONES EXTRAS (TEMA Y QR) --- */
-.btn-extra {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: transform 0.2s;
-}
-
-.btn-extra:hover {
-    transform: scale(1.05);
-}
-
-/* --- EFECTO AGRANDAR QR --- */
-.overlay-qr {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.overlay-qr.qr-ampliado {
-    transform: scale(1.6);
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
-    z-index: 3000;
-}
-
-.contador-qr {
-    font-size: 1.2rem;
-    color: #43a047;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* --- MODO CLARO (Sobrescribe los colores por defecto) --- */
-body.modo-claro {
-    background-color: #efeae2;
-    color: #111b21;
-}
-
-body.modo-claro .cabecera {
-    background-color: #f0f2f5;
-    color: #111b21;
-    border-bottom: 1px solid #d1d7db;
-}
-
-body.modo-claro .chat-container {
-    background-color: #efeae2;
-}
-
-body.modo-claro .mensaje.izq {
-    background-color: #fff;
-    color: #111b21;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-body.modo-claro .mensaje.der {
-    background-color: #d9fdd3;
-    color: #111b21;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-body.modo-claro .mensaje-sistema {
-    background-color: #ffeecd;
-    color: #54656f;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-}
-
-body.modo-claro .instruccion-proyector {
-    color: #54656f;
-    text-shadow: none;
-}
-
-body.modo-claro .btn-extra {
-    background-color: #ddd;
-    color: #111b21;
+/* --- MEDIA QUERIES (Responsivo) --- */
+@media (max-width: 1000px) {
+    .overlay-contenido { flex-direction: column; align-items: center; }
+    .overlay-info { width: 100%; }
+    .overlay-qr { width: 100%; max-width: 400px; }
+    .columna-chat { width: 100%; }
 }
