@@ -1,31 +1,26 @@
 /* =========================================
-   SIMULADOR DE CHAT - HOJA DE ESTILOS V2
+   SIMULADOR DE CHAT - HOJA DE ESTILOS V3
    ========================================= */
 
-/* --- ESTILOS BASE (MODO CLARO) --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-body {
-    background-color: #efeae2; /* Fondo claro de WhatsApp */
-    color: #111b21;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-}
+body { background-color: #efeae2; color: #111b21; display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background-color 0.3s; }
 
-#pantalla-proyector {
-    display: flex;
-    height: calc(100vh - 80px); /* Resta el footer */
-    padding: 20px;
-    gap: 30px;
-    justify-content: center;
-    align-items: center;
+#pantalla-proyector { display: flex; height: calc(100vh - 80px); padding: 20px; gap: 30px; justify-content: center; align-items: center; }
+
+/* --- CONTADOR TOP RIGHT --- */
+.contador-participantes {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #43a047;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid #43a047;
+    z-index: 600;
 }
 
 /* --- COLUMNA DEL CHAT --- */
@@ -40,388 +35,115 @@ body {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
-    /* Fondo con el doodle clásico de WhatsApp */
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); 
-    background-repeat: repeat;
-    background-size: 400px;
-    background-blend-mode: overlay;
-    opacity: 0.95;
+    /* Aplicamos tu fondo claro por defecto */
+    background-image: url('../img/fondo-tema-claro.jpg'); 
+    background-size: cover;
+    background-position: center;
 }
 
-.cabecera-chat {
-    background-color: #f0f2f5;
-    padding: 15px 25px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border-bottom: 1px solid #d1d7db;
-    z-index: 10;
-}
+.cabecera-chat { background-color: #f0f2f5; padding: 15px 25px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #d1d7db; z-index: 10; }
+.avatar-grupo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background-color: #fff; }
+.info-grupo h2 { font-size: 1.5rem; color: #111b21; margin-bottom: 2px; }
+.info-grupo p { font-size: 0.9rem; color: #54656f; }
 
-.avatar-grupo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #fff;
-}
-
-.info-grupo h2 {
-    font-size: 1.5rem;
-    color: #111b21;
-    margin-bottom: 2px;
-}
-
-.info-grupo p {
-    font-size: 0.9rem;
-    color: #54656f;
-}
-
-#chat-container {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    z-index: 10;
-}
+#chat-container { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; z-index: 10; }
 
 /* --- BURBUJAS DE CHAT (CLARAS) --- */
-.mensaje {
-    max-width: 75%;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-size: 1.4rem;
-    position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    animation: aparecer 0.3s ease-out;
-}
-
-@keyframes aparecer {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.mensaje.izq {
-    align-self: flex-start;
-    background-color: #fff;
-    color: #111b21;
-    border-top-left-radius: 0;
-}
-
-.mensaje.der {
-    align-self: flex-end;
-    background-color: #d9fdd3;
-    color: #111b21;
-    border-top-right-radius: 0;
-}
-
-.mensaje-imagen {
-    max-width: 250px;
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 8px;
-    display: block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
+.mensaje { max-width: 75%; padding: 12px 18px; border-radius: 12px; font-size: 1.4rem; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); animation: aparecer 0.3s ease-out; }
+@keyframes aparecer { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.mensaje.izq { align-self: flex-start; background-color: #fff; color: #111b21; border-top-left-radius: 0; }
+.mensaje.der { align-self: flex-end; background-color: #d9fdd3; color: #111b21; border-top-right-radius: 0; }
+.mensaje-imagen { max-width: 250px; width: 100%; border-radius: 10px; margin-top: 8px; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
 /* Nombres emisores */
-.emisor {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    display: block;
-}
+.emisor { font-weight: bold; font-size: 1.1rem; margin-bottom: 5px; display: block; }
 .emisor-Nico { color: #53bdeb; }
 .emisor-Sofí { color: #f06292; }
 .emisor-Mati { color: #a5d6a7; }
 .emisor-Lucas { color: #ffb74d; }
 .emisor-Camila { color: #ba68c8; }
 
-.mensaje-sistema {
-    align-self: center;
-    background-color: #ffeecd;
-    color: #54656f;
-    padding: 8px 15px;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-    text-align: center;
-    max-width: 80%;
-}
+.mensaje-sistema { align-self: center; background-color: #ffeecd; color: #54656f; padding: 8px 15px; border-radius: 10px; font-size: 1rem; font-weight: bold; box-shadow: 0 1px 1px rgba(0,0,0,0.05); text-align: center; max-width: 80%; }
 
-/* --- BARRA INFERIOR DEL CHAT (CONTROLES Y CONTADOR) --- */
+/* --- PIE DEL CHAT (Con separador) --- */
 .pie-chat {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
-    padding: 0 10px;
+    padding: 15px 25px;
     z-index: 10;
+    background-color: #f0f2f5;
+    border-top: 1px solid #d1d7db; /* Vuelve la línea separadora */
 }
 
-.instruccion-proyector {
-    color: #54656f;
-    font-size: 1.1rem;
-    font-style: italic;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 5px 10px;
-    border-radius: 5px;
-}
+.instruccion-proyector { color: #54656f; font-size: 1.1rem; font-style: italic; }
 
-.contador-participantes {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #43a047;
-    padding: 8px 15px;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: 2px solid #43a047;
-}
-
-.btn-extra {
-    background-color: #ddd;
-    color: #111b21;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: transform 0.2s;
-}
+.btn-extra { background-color: #ddd; color: #111b21; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: transform 0.2s; }
 .btn-extra:hover { transform: scale(1.05); }
 
 /* --- OVERLAY DE PARADA DILEMÁTICA --- */
-#overlay-parada {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    padding: 20px;
-}
+#overlay-parada { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(239, 234, 226, 0.95); backdrop-filter: blur(8px); z-index: 1000; display: flex; justify-content: center; align-items: center; color: #111b21; padding: 20px; transition: background-color 0.3s; }
+.overlay-contenido { background-color: #fff; border: 3px solid #ff5252; border-radius: 20px; padding: 40px; display: flex; flex-direction: column; max-width: 900px; width: 100%; box-shadow: 0 0 50px rgba(0,0,0,0.1); animation: zoomIn 0.3s ease-out; position: relative; }
+@keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.overlay-contenido {
-    background-color: #1e1e1e;
-    border: 3px solid #ff5252;
-    border-radius: 20px;
-    padding: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    max-width: 1200px;
-    width: 100%;
-    max-height: 95vh;
-    overflow-y: auto;
-    box-shadow: 0 0 50px rgba(255, 82, 82, 0.3);
-    animation: zoomIn 0.3s ease-out;
-}
-
-@keyframes zoomIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.overlay-info {
-    flex: 2;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
+.overlay-info { display: flex; flex-direction: column; justify-content: center; }
 #overlay-titulo { color: #ff5252; font-size: 2.5rem; margin-bottom: 10px; }
-#overlay-pregunta { font-size: 1.6rem; margin-bottom: 25px; color: #ccc; line-height: 1.4; }
+#overlay-pregunta { font-size: 1.6rem; margin-bottom: 25px; color: #54656f; line-height: 1.4; }
 
 .opciones-lista { display: flex; flex-direction: column; gap: 15px; }
-
-.opcion-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.3rem;
-    padding: 15px 25px;
-    border-radius: 12px;
-    font-weight: bold;
-    gap: 20px;
-}
-
+.opcion-item { display: flex; justify-content: space-between; align-items: center; font-size: 1.3rem; padding: 15px 25px; border-radius: 12px; font-weight: bold; gap: 20px; color: white; transition: all 0.3s ease;}
 .opcion-item.A { background-color: #e53935; }
 .opcion-item.B { background-color: #1e88e5; }
 .opcion-item.C { background-color: #43a047; }
-
 .opcion-texto { flex: 1; line-height: 1.3; }
+.opcion-votos { font-size: 2.2rem; background: rgba(0, 0, 0, 0.4); padding: 10px 20px; border-radius: 8px; min-width: 80px; text-align: center; }
 
-.opcion-votos {
-    font-size: 2.2rem;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 10px 20px;
-    border-radius: 8px;
-    min-width: 80px;
-    text-align: center;
-}
+.instruccion-enter { margin-top: 25px; color: #ff5252; font-size: 1.2rem; font-weight: bold; text-align: center; }
 
-.instruccion-enter { margin-top: 25px; color: #ffeb3b; font-size: 1.2rem; font-style: italic; }
+/* Botón flotante para llamar al QR */
+.btn-flotante-qr { position: absolute; top: -20px; right: -20px; background-color: #111b21; color: white; border: 3px solid #ff5252; padding: 15px 25px; border-radius: 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.2s; }
+.btn-flotante-qr:hover { transform: scale(1.1); }
 
-/* --- COLUMNA LATERAL DEL QR --- */
-.overlay-qr {
-    flex: 1;
-    min-width: 280px; 
-    background-color: #121212;
-    border-radius: 15px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #444;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+/* --- OVERLAY DEL QR GIGANTE --- */
+#overlay-qr-gigante { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+.qr-gigante-contenido { background-color: #fff; padding: 40px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 50px rgba(255,255,255,0.2); animation: zoomIn 0.3s ease-out; }
+.qr-gigante-contenido h3 { font-size: 2.5rem; margin-bottom: 20px; color: #111b21; }
+.qr-gigante-contenido p { font-size: 1.5rem; color: #54656f; margin-top: 20px; }
+.qr-placeholder img { width: 400px; height: 400px; border-radius: 10px; }
 
-.overlay-qr.qr-ampliado {
-    transform: scale(1.6);
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
-    z-index: 3000;
-}
+.contador-qr { font-size: 1.5rem !important; color: #43a047 !important; font-weight: bold; margin-top: 15px !important; background-color: rgba(67, 160, 71, 0.1); padding: 10px 20px; border-radius: 10px; border: 2px solid #43a047; }
 
-.qr-placeholder {
-    width: 100%;
-    max-width: 280px;
-    aspect-ratio: 1/1;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.overlay-qr h3 { font-size: 2rem; margin-bottom: 20px; color: #fff; text-align: center; }
-.overlay-qr p { font-size: 1.2rem; color: #aaa; margin-top: 20px; text-align: center; }
-
-.contador-qr {
-    font-size: 1.2rem;
-    color: #43a047 !important;
-    font-weight: bold;
-    margin-top: 15px !important;
-    background-color: rgba(67, 160, 71, 0.1);
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 2px solid #43a047;
-}
-
-/* --- OVERLAY DE FIN / PAUSA --- */
-.overlay-fin {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 2000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.fin-contenido {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    border-color: #ffd54f;
-    box-shadow: 0 0 50px rgba(255, 213, 79, 0.3);
-}
-
+/* --- OVERLAY FIN --- */
+.overlay-fin { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); z-index: 3000; display: flex; justify-content: center; align-items: center; }
+.fin-contenido { align-items: center; text-align: center; border-color: #ffd54f; }
 .fin-contenido h1 { color: #ff5252; font-size: 4rem; margin-bottom: 20px; }
-.fin-contenido p { font-size: 2rem; color: #ffffff; }
-
-/* --- PANTALLA CELULAR (MOBILE) --- */
-#pantalla-celular {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-    gap: 20px;
-    background-color: #121212;
-    color: #fff;
-}
-
-#pantalla-celular h2 { font-size: 2rem; margin-bottom: 20px; text-align: center; }
-
-.btn-voto {
-    width: 100%;
-    max-width: 400px;
-    padding: 25px;
-    font-size: 2rem;
-    border: none;
-    border-radius: 15px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-.btn-voto[data-opcion="A"] { background-color: #e53935; }
-.btn-voto[data-opcion="B"] { background-color: #1e88e5; }
-.btn-voto[data-opcion="C"] { background-color: #43a047; }
-.btn-voto:active { transform: scale(0.95); }
-
-.mensaje-exito {
-    text-align: center;
-    background-color: #1e1e1e;
-    padding: 40px 20px;
-    border-radius: 20px;
-    border: 2px solid #43a047;
-}
-.mensaje-exito h2 { color: #43a047; font-size: 2.5rem; margin-bottom: 15px; }
-.mensaje-exito p { font-size: 1.5rem; color: #ccc; margin-bottom: 10px; }
 
 /* --- PIE DE PÁGINA (JUVENTUDES) --- */
-.pie-pagina {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background-color: #000000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 500;
-}
+.pie-pagina { position: absolute; bottom: 0; left: 0; width: 100%; height: 80px; background-color: #000; display: flex; justify-content: center; align-items: center; z-index: 500; }
+.pie-pagina img { height: 50px; width: auto; object-fit: contain; }
 
-.pie-pagina img {
-    height: 50px;
-    width: auto;
-    object-fit: contain;
-}
-
-/* --- CLASE PARA EL MODO OSCURO --- */
+/* =========================================
+   MODO OSCURO (Sobrescribe variables y fondos)
+   ========================================= */
 body.modo-oscuro { background-color: #111b21; color: #e9edef; }
-body.modo-oscuro .columna-chat { background-color: #0b141a; background-image: none; box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5); }
+body.modo-oscuro .columna-chat { 
+    /* Cambiamos al fondo oscuro que subiste */
+    background-image: url('../img/fondo-tema-oscuro.png'); 
+}
 body.modo-oscuro .cabecera-chat { background-color: #202c33; border-bottom: 1px solid #313d45; }
 body.modo-oscuro .info-grupo h2 { color: #e9edef; }
 body.modo-oscuro .info-grupo p { color: #8696a0; }
 body.modo-oscuro .mensaje.izq { background-color: #202c33; color: #e9edef; box-shadow: none; }
 body.modo-oscuro .mensaje.der { background-color: #005c4b; color: #e9edef; box-shadow: none; }
 body.modo-oscuro .mensaje-sistema { background-color: #182229; color: #8696a0; box-shadow: none; }
+
+/* Pie de chat en modo oscuro */
+body.modo-oscuro .pie-chat { background-color: #202c33; border-top: 1px solid #313d45; }
 body.modo-oscuro .instruccion-proyector { color: #ffeb3b; background-color: transparent; }
 body.modo-oscuro .btn-extra { background-color: #333; color: #fff; }
 
-/* --- MEDIA QUERIES (Responsivo) --- */
-@media (max-width: 1000px) {
-    .overlay-contenido { flex-direction: column; align-items: center; }
-    .overlay-info { width: 100%; }
-    .overlay-qr { width: 100%; max-width: 400px; }
-    .columna-chat { width: 100%; }
-}
+/* Overlay de parada en modo oscuro */
+body.modo-oscuro #overlay-parada { background-color: rgba(17, 27, 33, 0.95); color: white; }
+body.modo-oscuro .overlay-contenido { background-color: #1e1e1e; box-shadow: 0 0 50px rgba(255, 82, 82, 0.3); }
+body.modo-oscuro #overlay-pregunta { color: #ccc; }
+body.modo-oscuro .instruccion-enter { color: #ffeb3b; }
