@@ -231,3 +231,6 @@ body#mobile-body button:active, .btn-voto:active { transform: scale(0.95); }
 }
 .mensaje-exito h2 { color: #43a047 !important; font-size: 2.5rem; margin-bottom: 15px; }
 .mensaje-exito p { font-size: 1.5rem; color: #ccc; }
+
+body#mobile-body .btn-realidad { background-color: #43a047 !important; font-size: 2.5rem; padding: 30px; }
+body#mobile-body .btn-mito { background-color: #e53935 !important; font-size: 2.5rem; padding: 30px; }

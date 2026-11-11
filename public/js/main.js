@@ -270,4 +270,13 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// --- BOTÓN SIGUIENTE ACTIVIDAD ---
+const btnSiguiente = document.getElementById('btn-siguiente-actividad');
+if (btnSiguiente) {
+    btnSiguiente.addEventListener('click', () => {
+        socket.emit('iniciar_tribunal');
+        window.location.href = 'tribunal.html'; // Te redirige al nuevo HTML
+    });
+}
+
 avanzarHistoria();

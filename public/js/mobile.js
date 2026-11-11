@@ -93,3 +93,33 @@ socket.on('expulsar_clientes', () => {
     `;
     socket.disconnect(); 
 });
+
+// --- LÓGICA DEL TRIBUNAL ---
+function cambiarFaseMovil(fase) {
+    if (fase === 'tribunal') {
+        document.getElementById('pantalla-celular').style.display = 'none';
+        document.getElementById('pantalla-tribunal').style.display = 'flex';
+    } else {
+        document.getElementById('pantalla-celular').style.display = 'flex';
+        document.getElementById('pantalla-tribunal').style.display = 'none';
+    }
+}
+
+socket.on('estado_fase', cambiarFaseMovil);
+socket.on('cambio_fase', cambiarFaseMovil);
+
+socket.on('votacion_tribunal_abierta', () => {
+    document.getElementById('titulo-tribunal').innerText = '¿Mito o Realidad?';
+    document.getElementById('opciones-tribunal').style.display = 'flex';
+});
+
+socket.on('votacion_tribunal_cerrada', () => {
+    document.getElementById('opciones-tribunal').style.display = 'none';
+    document.getElementById('titulo-tribunal').innerText = 'Atento al proyector...';
+});
+
+function votarTribunal(opcion) {
+    socket.emit('voto_tribunal', opcion);
+    document.getElementById('opciones-tribunal').style.display = 'none';
+    document.getElementById('titulo-tribunal').innerText = '✅ Voto enviado';
+}

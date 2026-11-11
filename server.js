@@ -41,8 +41,13 @@ let tallerActual = {
     guardado: false // NUEVO: Bandera para saber si ya se mandó a Sheets
 };
 
+// --- NUEVAS VARIABLES PARA EL TRIBUNAL ---
+let faseActual = 'simulador'; // Puede ser 'simulador' o 'tribunal'
+let contadoresTribunal = { mito: 0, realidad: 0 };
+
 io.on('connection', (socket) => {
     socket.emit('estado_actual', estadoVotacion);
+    socket.emit('estado_fase', faseActual); // Le avisa al celular en qué fase estamos apenas se conecta
 
     socket.on('soy_participante', (deviceId) => {
         socket.isParticipante = true;
@@ -55,7 +60,7 @@ io.on('connection', (socket) => {
             // Guardamos la marca temporal en el primer escaneo
             if (participantesConectados === 1 && !tallerActual.marcaTemporal) {
                 const ahora = new Date();
-                // NUEVO: Forzamos la zona horaria a Argentina sin importar dónde esté el servidor
+                // Forzamos la zona horaria a Argentina sin importar dónde esté el servidor
                 tallerActual.marcaTemporal = ahora.toLocaleString('es-AR', {
                     timeZone: 'America/Argentina/Buenos_Aires',
                     day: '2-digit',
@@ -76,6 +81,7 @@ io.on('connection', (socket) => {
         io.emit('actualizar_participantes', participantesConectados);
     });
 
+    // --- EVENTOS DEL SIMULADOR ---
     socket.on('abrir_votacion', (opciones) => {
         estadoVotacion = { activa: true, opciones: opciones, fin: false };
         io.emit('votacion_abierta', opciones);
@@ -90,7 +96,6 @@ io.on('connection', (socket) => {
         tallerActual.votos[`${datosParada.parada}C`] = datosParada.C;
     });
 
-    // NUEVO: CUANDO SE LLEGA A LA PANTALLA DE FIN DE SIMULACIÓN
     socket.on('fin_simulacion', () => {
         estadoVotacion = { activa: false, opciones: null, fin: true };
         io.emit('simulacion_finalizada');
@@ -106,17 +111,43 @@ io.on('connection', (socket) => {
         io.emit('actualizar_votos', opcion);
     });
 
-    // CUANDO SE APRIETA LA TECLA "R"
+    // --- EVENTOS DEL TRIBUNAL ---
+    socket.on('iniciar_tribunal', () => {
+        faseActual = 'tribunal';
+        io.emit('cambio_fase', 'tribunal');
+    });
+
+    socket.on('abrir_votacion_tribunal', () => {
+        contadoresTribunal = { mito: 0, realidad: 0 }; // Limpiamos la cuenta para la nueva frase
+        io.emit('votacion_tribunal_abierta');
+    });
+
+    socket.on('cerrar_votacion_tribunal', () => {
+        io.emit('votacion_tribunal_cerrada');
+    });
+
+    socket.on('voto_tribunal', (opcion) => { // Recibe 'mito' o 'realidad'
+        contadoresTribunal[opcion]++;
+        io.emit('actualizar_votos_tribunal', contadoresTribunal);
+    });
+
+    // --- REINICIAR TALLER (Tecla R) ---
     socket.on('reiniciar_taller', () => {
         // Por las dudas: si apretaste "R" por accidente ANTES de terminar, guarda los datos parciales
         if (tallerActual.marcaTemporal && !tallerActual.guardado) {
             guardarEnSheets(tallerActual);
         }
 
+        // Reseteamos el Simulador
         estadoVotacion = { activa: false, opciones: null, fin: false };
         participantesConectados = 0; 
         dispositivosUnicos = {}; 
         tallerActual = { marcaTemporal: null, totalParticipantes: 0, votos: {}, guardado: false };
+        
+        // Reseteamos el Tribunal
+        faseActual = 'simulador';
+        contadoresTribunal = { mito: 0, realidad: 0 };
+        io.emit('cambio_fase', 'simulador');
         
         io.emit('expulsar_clientes'); 
         io.emit('actualizar_participantes', participantesConectados);
