@@ -7,19 +7,25 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="mobile-body">
+    
     <!-- FASE 1: SIMULADOR (Opciones A, B, C) -->
     <div id="pantalla-celular" style="display: flex;">
         <h2>Elige tu opción</h2>
-        <div id="opciones-container"></div>
+        <div id="opciones-container">
+            <button class="btn-voto" data-opcion="A" onclick="votar('A')">Opción A</button>
+            <button class="btn-voto" data-opcion="B" onclick="votar('B')">Opción B</button>
+            <button class="btn-voto" data-opcion="C" onclick="votar('C')">Opción C</button>
+        </div>
     </div>
 
     <!-- FASE 2: TRIBUNAL (Mito o Realidad) -->
     <div id="pantalla-tribunal" style="display: none; flex-direction: column; align-items: center; width: 100%; max-width: 400px; gap: 30px;">
-        <h2 id="titulo-tribunal" style="color: #ffeb3b; font-size: 2.5rem;">Atento al proyector...</h2>
+        <h2 id="titulo-tribunal" style="color: #ffeb3b; font-size: 2.5rem; text-align: center;">Atento al proyector...</h2>
         
+        <!-- Botones con colores calcados del proyector -->
         <div id="opciones-tribunal" style="display: none; width: 100%; flex-direction: column; gap: 20px;">
-            <button class="btn-voto btn-realidad" onclick="votarTribunal('realidad')">🟩 REALIDAD</button>
-            <button class="btn-voto btn-mito" onclick="votarTribunal('mito')">🟥 MITO</button>
+            <button class="btn-voto" style="background-color: #43a047 !important; color: white !important; font-size: 2.5rem; padding: 30px;" onclick="votarTribunal('realidad')">REALIDAD</button>
+            <button class="btn-voto" style="background-color: #e53935 !important; color: white !important; font-size: 2.5rem; padding: 30px;" onclick="votarTribunal('mito')">MITO</button>
         </div>
     </div>
     
