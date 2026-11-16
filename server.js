@@ -49,6 +49,9 @@ io.on('connection', (socket) => {
     socket.emit('estado_actual', estadoVotacion);
     socket.emit('estado_fase', faseActual); // Le avisa al celular en qué fase estamos apenas se conecta
 
+    // NUEVA LÍNEA: Le manda el número actual al proyector apenas abre el Tribunal
+    socket.emit('actualizar_participantes', participantesConectados);
+    
     socket.on('soy_participante', (deviceId) => {
         socket.isParticipante = true;
         socket.deviceId = deviceId;
