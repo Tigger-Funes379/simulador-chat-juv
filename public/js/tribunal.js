@@ -2,9 +2,12 @@ const socket = io();
 
 // FRASES DEL TRIBUNAL
 const afirmaciones = [
-    { texto: '"Si soy menor de 18 años, no puedo tener una causa penal ni sufrir consecuencias legales por lo que hago en internet."', correcta: 'mito' },
-    { texto: '"Reenviar una foto íntima o editada de un compañero sin su permiso es un delito, aunque yo no la haya sacado ni editado originalmente."', correcta: 'realidad' },
-    { texto: '"Si borro el mensaje o la foto del grupo, la evidencia desaparece y ya no me pueden denunciar."', correcta: 'mito' }
+    { texto: '"Como soy menor de edad, por más que cometa un delito grave en internet, la ley no me puede hacer nada hasta los 18 años."', correcta: 'mito' },
+    { texto: '"Reenviar una foto íntima que te llegó por WhatsApp o subirla a un grupo solo por chiste no es delito, porque la culpa es de quien la sacó."', correcta: 'mito' },
+    { texto: '"El objetivo prioritario del régimen juvenil frente a delitos no es encerrar a los y las adolescentes, sino aplicar medidas alternativas como servicios comunitarios y la reparación directa del daño."', correcta: 'realidad' },
+    { texto: '"Si amenazo con publicar un chat o una foto privada a cambio de plata o de que alguien haga algo que no quiere, es solo una joda pesada."', correcta: 'mito' },
+    { texto: '"A partir de los 14 años, si se comete un delito penal, la ley contempla procesos judiciales formales para adolescentes, con intervención de un Supervisor Especializado."', correcta: 'realidad' },
+    { texto: '"Si a un menor lo detienen por un delito digital o de otro tipo, lo meten preso a una comisaría común con adultos."', correcta: 'mito' }
 ];
 
 let pasoActual = -1;
